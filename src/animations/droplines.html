@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>DropLines</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script type="text/javascript" src="scripts/common.js"></script>
+    <style>
+      body {
+        overflow: hidden;
+        background-color: hsl(143, 100%, 1%);
+        padding: 0;
+        margin: 0;
+        top: 0;
+        left: 0;
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+      }
+      canvas {
+        top: 0;
+        left: 0;
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="board"></canvas>
+  </body>
+  <script type="text/javascript" defer>
+    function getBoardContext() {
+      let board = document.getElementById('board');
+      let ctx = board.getContext('2d');
+      ctx.canvas.width = window.innerWidth;
+      ctx.canvas.height = window.innerHeight;
+
+      window.onresize = () => {
+        ctx.canvas.width = window.innerWidth;
+        ctx.canvas.height = window.innerHeight;
+      };
+      return ctx;
+    }
+
+    function generateLine() {
+      let width = Math.floor(Math.random() * 5 + 3);
+      let maxHeight = Math.floor(Math.random() * 600 + 100);
+      let x = Math.floor(Math.random() * window.innerWidth + 1);
+      let y = Math.floor(Math.random() * window.innerHeight - maxHeight);
+      let speed = Math.floor(Math.random() * 5 + 1);
+      return { x, y, width, height: 0, maxHeight, speed, shrinking: false, completed: false };
+    }
+
+    function configureLine(line) {
+      if (line.height > 50 && !line.shrinking) {
+        line.y += line.speed;
+      } else if (line.shrinking) {
+        line.y += line.speed * 1.8;
+      }
+      if (line.height >= line.maxHeight) {
+        line.shrinking = true;
+      }
+      if (line.shrinking) {
+        line.height -= line.speed;
+      } else {
+        line.height += line.speed;
+      }
+
+      if (line.shrinking && line.height <= 0) {
+        line.completed = true;
+      }
+    }
+
+    function drawLine(context, line) {
+      var grd = context.createLinearGradient(0, line.y, 0, line.y + line.height);
+      grd.addColorStop(0, 'hsla(' + hue + ', 100%, 18%, 0)');
+      grd.addColorStop(0.9, 'hsl(' + hue + ', 67%, 40%)');
+      grd.addColorStop(0.981, 'hsl(' + hue + ', 100%, 93%)');
+      grd.addColorStop(1, 'hsl(' + hue + ', 100%, 93%)');
+      context.strokeStyle = grd;
+      context.beginPath();
+      context.moveTo(line.x, line.y);
+      context.lineWidth = line.width;
+      context.lineTo(line.x, Math.floor(line.y) + Math.floor(line.height));
+      context.stroke();
+      context.closePath();
+    }
+
+    function drawLoop(context, lines) {
+      context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+      lines.forEach((line) => {
+        configureLine(line);
+        drawLine(context, line);
+      });
+
+      if (rotateHue) {
+        hue += 0.2;
+      }
+
+      lines = lines.filter((ln) => !ln.completed);
+      while (lines.length < context.canvas.width / (11 - density)) {
+        lines.push(generateLine());
+      }
+      window.requestAnimationFrame(() => drawLoop(context, lines));
+    }
+
+    let hue = 123;
+    let rotateHue = false;
+    let lines = [];
+    let density = 5;
+
+    window.onhashchange = function () {
+      readConfig();
+    };
+
+    function readConfig() {
+      let config = hashChanged();
+      if (config) {
+        hue = config.hue ?? hue;
+        rotateHue = config.rotateHue || rotateHue;
+        density = config.density ?? density;
+        density = Math.min(Math.max(density, 0), 10);
+      }
+    }
+
+    readConfig();
+
+    drawLoop(getBoardContext(), lines);
+  </script>
+</html>
