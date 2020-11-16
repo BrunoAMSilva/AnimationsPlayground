@@ -1,1 +1,208 @@
 /* You can add global styles to this file, and also import other style files */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 0;
+  margin: 0;
+  background-color: #222233;
+  color: #d9d9df;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+main {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1260px;
+  padding: 20px 0px 20px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  align-items: flex-start;
+  justify-content: space-around;
+  align-content: flex-start;
+}
+
+.item {
+  position: relative;
+  display: block;
+  max-width: 320px;
+  min-width: calc(50% - 40px);
+  border-radius: 7px;
+  overflow: hidden;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.6);
+  border: 0px solid #3f65a3;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  transition: box-shadow 300ms ease-out, border-width 300ms ease-out,
+    border-color 300ms ease-out;
+}
+
+.item.active {
+  border-color: #022e8f;
+  box-shadow: 0 4px 50px rgba(0, 0, 0, 0.9);
+  border-width: 3px;
+}
+
+.item:hover {
+  box-shadow: 0 4px 50px rgba(0, 0, 0, 0.9);
+  border-width: 3px;
+  border-color: #3f65a3;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  object-fit: cover;
+}
+
+iframe {
+  border: none;
+  max-width: 100%;
+  border-radius: 7px;
+}
+
+h3 {
+  margin-bottom: 0;
+}
+
+label {
+  display: block;
+}
+
+.item p {
+  display: block;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  padding: 10px 20px;
+  margin: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
+}
+
+.item small {
+  color: #778;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 350px;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-left: solid 1px #556;
+  transition: all 300ms ease-in-out;
+
+  span {
+    color: #778;
+    margin-bottom: 20px;
+    display: block;
+  }
+}
+
+.details img {
+  border-radius: 7px;
+}
+
+.details.hidden {
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+}
+
+.details-host {
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+  align-items: stretch;
+  width: calc(350px - 40px);
+}
+
+input[type="range"] {
+  width: 100%;
+}
+
+.checkbox {
+  display: flex;
+  align-items: baseline;
+  padding: 10px 0px;
+  label {
+    margin-left: 10px;
+  }
+}
+
+a.button {
+  text-decoration: none;
+  background-color: transparent;
+  padding: 10px 20px;
+  text-align: center;
+  flex: 0 0 280px;
+  min-width: 120px;
+  color: #096478;
+  border: 1px solid #096478;
+  border-radius: 300px;
+}
+
+a.button.primary {
+  margin-top: 40px;
+  color: white;
+  border: none;
+  display: block;
+  flex: 0 0 0;
+  background: linear-gradient(90deg, #022e8f 0%, #3f65a3 100%);
+}
+
+@media (max-width: 564px) {
+  .details {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background-color: #556;
+    width: 100%;
+    max-width: 100%;
+
+    .details-host {
+      width: 100%;
+    }
+  }
+}
+
+input[type="range"].color::-webkit-slider-container {
+  background: linear-gradient(
+    to right,
+    hsl(0, 100%, 50%) 0%,
+    hsl(18, 100%, 50%) 5%,
+    hsl(36, 100%, 50%) 10%,
+    hsl(54, 100%, 50%) 15%,
+    hsl(72, 100%, 50%) 20%,
+    hsl(90, 100%, 50%) 25%,
+    hsl(108, 100%, 50%) 30%,
+    hsl(126, 100%, 50%) 35%,
+    hsl(144, 100%, 50%) 40%,
+    hsl(162, 100%, 50%) 45%,
+    hsl(180, 100%, 50%) 50%,
+    hsl(198, 100%, 50%) 55%,
+    hsl(216, 100%, 50%) 60%,
+    hsl(234, 100%, 50%) 65%,
+    hsl(252, 100%, 50%) 70%,
+    hsl(270, 100%, 50%) 75%,
+    hsl(288, 100%, 50%) 80%,
+    hsl(306, 100%, 50%) 85%,
+    hsl(324, 100%, 50%) 90%,
+    hsl(342, 100%, 50%) 95%,
+    hsl(360, 100%, 50%) 100%
+  );
+  border-radius: 2px;
+  height: 5px;
+}

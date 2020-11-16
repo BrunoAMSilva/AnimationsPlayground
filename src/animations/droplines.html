@@ -3,6 +3,25 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta property="og:title" content="DropLines" />
+    <meta name="description" content="DropLines canvas animation." />
+    <meta property="og:description" content="DropLines canvas animation." />
+    <meta
+      name="keywords"
+      content="Animations, Screensaver, Wallpaper, animated"
+    />
+    <meta name="author" content="Bruno & Miguel" />
+    <meta
+      property="og:image"
+      content="https://ludicrous.duckdns.org/animations/assets/DropLines.png"
+    />
+    <meta
+      property="og:url"
+      content="https://ludicrous.duckdns.org/animations/animations/droplines.html"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:site_name" content="Canvas Animations - DropLines" />
+    <meta name="twitter:image:alt" content="DropLines sample" />
     <title>DropLines</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script type="text/javascript" src="scripts/common.js"></script>
@@ -32,12 +51,12 @@
   </body>
   <script type="text/javascript" defer>
     function getBoardContext() {
-      let board = document.getElementById('board');
-      let ctx = board.getContext('2d');
+      let board = document.getElementById("board");
+      let ctx = board.getContext("2d");
       ctx.canvas.width = window.innerWidth;
       ctx.canvas.height = window.innerHeight;
 
-      window.onresize = () => {
+      window.onresize = function () {
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
       };
@@ -50,7 +69,16 @@
       let x = Math.floor(Math.random() * window.innerWidth + 1);
       let y = Math.floor(Math.random() * window.innerHeight - maxHeight);
       let speed = Math.floor(Math.random() * 5 + 1);
-      return { x, y, width, height: 0, maxHeight, speed, shrinking: false, completed: false };
+      return {
+        x: x,
+        y: y,
+        width: width,
+        height: 0,
+        maxHeight: maxHeight,
+        speed: speed,
+        shrinking: false,
+        completed: false,
+      };
     }
 
     function configureLine(line) {
@@ -74,11 +102,16 @@
     }
 
     function drawLine(context, line) {
-      var grd = context.createLinearGradient(0, line.y, 0, line.y + line.height);
-      grd.addColorStop(0, 'hsla(' + hue + ', 100%, 18%, 0)');
-      grd.addColorStop(0.9, 'hsl(' + hue + ', 67%, 40%)');
-      grd.addColorStop(0.981, 'hsl(' + hue + ', 100%, 93%)');
-      grd.addColorStop(1, 'hsl(' + hue + ', 100%, 93%)');
+      var grd = context.createLinearGradient(
+        0,
+        line.y,
+        0,
+        line.y + line.height
+      );
+      grd.addColorStop(0, "hsla(" + hue + ", 100%, 18%, 0)");
+      grd.addColorStop(0.9, "hsl(" + hue + ", 67%, 40%)");
+      grd.addColorStop(0.981, "hsl(" + hue + ", 100%, 93%)");
+      grd.addColorStop(1, "hsl(" + hue + ", 100%, 93%)");
       context.strokeStyle = grd;
       context.beginPath();
       context.moveTo(line.x, line.y);
@@ -90,7 +123,7 @@
 
     function drawLoop(context, lines) {
       context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-      lines.forEach((line) => {
+      lines.forEach(function (line) {
         configureLine(line);
         drawLine(context, line);
       });
@@ -99,11 +132,15 @@
         hue += 0.2;
       }
 
-      lines = lines.filter((ln) => !ln.completed);
+      lines = lines.filter(function (ln) {
+        return !ln.completed;
+      });
       while (lines.length < context.canvas.width / (11 - density)) {
         lines.push(generateLine());
       }
-      window.requestAnimationFrame(() => drawLoop(context, lines));
+      window.requestAnimationFrame(function () {
+        drawLoop(context, lines);
+      });
     }
 
     let hue = 123;
@@ -118,10 +155,21 @@
     function readConfig() {
       let config = hashChanged();
       if (config) {
-        hue = config.hue ?? hue;
-        rotateHue = config.rotateHue || rotateHue;
-        density = config.density ?? density;
+        if (config.hue !== undefined) {
+          hue = config.hue;
+        }
+        if (config.rotateHue !== undefined) {
+          rotateHue = config.rotateHue;
+        }
+        if (config.density !== undefined) {
+          density = config.density;
+        }
+
         density = Math.min(Math.max(density, 0), 10);
+      } else {
+        hue = 123;
+        rotateHue = false;
+        density = 5;
       }
     }
 

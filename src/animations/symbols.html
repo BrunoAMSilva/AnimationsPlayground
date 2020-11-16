@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta property="og:title" content="Symbols" />
+    <meta name="description" content="Symbols canvas animation." />
+    <meta property="og:description" content="Symbols canvas animation." />
+    <meta
+      name="keywords"
+      content="Animations, Screensaver, Wallpaper, animated"
+    />
+    <meta name="author" content="Bruno & Miguel" />
+    <meta
+      property="og:image"
+      content="https://ludicrous.duckdns.org/animations/assets/DropLines.png"
+    />
+    <meta
+      property="og:url"
+      content="https://ludicrous.duckdns.org/animations/animations/droplines.html"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:site_name" content="Canvas Animations - Symbols" />
+    <meta name="twitter:image:alt" content="DropLines sample" />
+    <title>DropLines</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script type="text/javascript" src="scripts/common.js"></script>
+    <style>
+      body {
+        overflow: hidden;
+        background-color: hsl(192, 100%, 98%);
+        padding: 0;
+        margin: 0;
+        top: 0;
+        left: 0;
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+      }
+      canvas {
+        top: 0;
+        left: 0;
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="board"></canvas>
+  </body>
+  <script type="text/javascript" defer>
+    function getBoardContext() {
+      let board = document.getElementById("board");
+      let ctx = board.getContext("2d");
+      ctx.canvas.width = window.innerWidth;
+      ctx.canvas.height = window.innerHeight;
+
+      window.onresize = function () {
+        ctx.canvas.width = window.innerWidth;
+        ctx.canvas.height = window.innerHeight;
+      };
+      return ctx;
+    }
+
+    function generate() {
+      let maxSize = Math.floor(Math.random() * 600 + 100);
+      let x = Math.floor(Math.random() * window.innerWidth + 1);
+      let y = Math.floor(Math.random() * window.innerHeight - maxSize);
+      let speed = Math.floor(Math.random() * 5 + 1);
+      return {
+        x: x,
+        y: y,
+        size: 60 + Math.random() * 100,
+        maxSize: maxSize,
+        vx: Math.random() * velocity - velocity,
+        vy: Math.random() * velocity - velocity,
+        va: Math.random() * 0.4 * (velocity * 0.01) - velocity * 0.00001,
+        speed: speed,
+        alpha: 0,
+        color: "rgba(1,143,203," + 0 + ")",
+        shrinking: false,
+        completed: false,
+      };
+    }
+
+    function configure(particle) {
+      if (!particle.frozen) {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        particle.alpha += particle.va;
+        particle.displayAlpha = particle.alpha < 0 ? 0 : particle.alpha;
+        if (particle.alpha < -0.5) {
+          particle.completed = true;
+        } else if (particle.alpha > 0.2) {
+          particle.va = -particle.va;
+          particle.shrinking = true;
+        }
+        if (particle.x > window.innerWidth) {
+          particle.vx = -particle.vx; // - Math.random();
+        } else if (particle.x < 0) {
+          particle.vx = -particle.vx; // + Math.random();
+        }
+
+        if (particle.y > window.innerHeight) {
+          particle.vy = -particle.vy; // - Math.random();
+        } else if (particle.y < 0) {
+          particle.vy = -particle.vy; // + Math.random();
+        }
+
+        particle.currentSize = particle.size;
+      }
+    }
+
+    function draw(context, particle) {
+      const gradient = context.createLinearGradient(
+        particle.x,
+        particle.size + particle.y,
+        particle.x + particle.size,
+        particle.y
+      );
+      gradient.addColorStop(
+        0,
+        "rgba(36,201,255," + particle.displayAlpha + ")"
+      );
+      gradient.addColorStop(1, "rgba(1,143,203," + particle.displayAlpha + ")");
+      context.fillStyle = gradient;
+      context.beginPath();
+      context.arc(
+        particle.x,
+        particle.y,
+        particle.currentSize,
+        0,
+        Math.PI * 2,
+        true
+      );
+      context.closePath();
+      context.fill();
+    }
+
+    function drawLoop(context, particles) {
+      context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+      particles.forEach(function (particle) {
+        configure(particle);
+        draw(context, particle);
+      });
+
+      if (rotateHue) {
+        hue += 0.2;
+      }
+
+      particles = particles.filter(function (particle) {
+        return !particle.completed;
+      });
+      while (particles.length < context.canvas.width / (101 - density)) {
+        particles.push(generate());
+      }
+      window.requestAnimationFrame(function () {
+        drawLoop(context, particles);
+      });
+    }
+
+    let velocity = 5;
+    let hue = 162;
+    let particles = [];
+    let rotateHue = false;
+    let density = 50;
+
+    window.onhashchange = function () {
+      readConfig();
+    };
+
+    function readConfig() {
+      let config = hashChanged();
+      if (config) {
+        if (config.hue !== undefined) {
+          hue = config.hue;
+        }
+        if (config.velocity !== undefined) {
+          velocity = config.velocity;
+        }
+        if (config.density !== undefined) {
+          density = config.density;
+        }
+
+        density = Math.min(Math.max(density, 0), 100);
+      } else {
+        hue = 162;
+        velocity = 0.5;
+        density = 90;
+      }
+    }
+
+    readConfig();
+
+    drawLoop(getBoardContext(), particles);
+  </script>
+</html>
