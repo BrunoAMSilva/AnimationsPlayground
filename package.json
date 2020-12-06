@@ -5,6 +5,10 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build-prod": "ng build --prod --aot=true --buildOptimizer=true --optimization=true --sourceMap=false --base-href=/animations/",
+    "deploy": "scp -r -P 3855 dist/animations/* bruno@ludicrous.duckdns.org:/users/brunosilva/Projects/tesladash-server/public/animations/",
+    "clean-prod": "ssh bruno@ludicrous.duckdns.org -p 3855 \"rm -r -f /users/brunosilva/Projects/tesladash-server/public/animations/*\"",
+    "publish": "npm run build-prod && npm run clean-prod && npm run deploy",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
