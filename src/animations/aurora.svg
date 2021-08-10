@@ -1,371 +1,290 @@
 <?xml version="1.0" encoding="utf8"?>
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-    viewBox="0 0 800 600" style="enable-background:new 0 0 800 600" xml:space="preserve">
+    viewBox="0 0 800 600" style="enable-background:new 0 0 800 600; background: #000000FF" xml:space="preserve">
     <defs>
-        <linearGradient id="background" x1="0" x2="1" y1="0.5" y2="0.5">
-            <stop offset="0%" stop-color="#000000" stop-opacity="0" />
-            <stop offset="25%" stop-color="#A182EC" stop-opacity="0.678" />
-            <stop offset="40%" stop-color="#2212CB" stop-opacity="1" />
-            <stop offset="70%" stop-color="#C800A3" stop-opacity="0.956" />
+        <linearGradient id="background1" x2="1" y2="0.5" x1="0" y1="0.5">
+            <stop offset="0%" stop-color="#675BE6FF" />
+            <stop offset="25%" stop-color="#A182ECAD" />
+            <stop offset="40%" stop-color="#2212CBFF" />
+            <stop offset="70%" stop-color="#C800A3F4" />
         </linearGradient>
-        <linearGradient id="background2" x1="0" x2="1" y1="0.5" y2="0.5">
-            <stop offset="0%" stop-color="#000000" stop-opacity="0" />
-            <stop offset="25%" stop-color="#FF6868" stop-opacity="1" />
-            <stop offset="40%" stop-color="#000000" stop-opacity="0" />
-            <stop offset="70%" stop-color="#131028" stop-opacity="1" />
+        <linearGradient id="background2" x2="1" y2="0.5" x1="0" y1="0.5">
+            <stop offset="0%" stop-color="#00000000" />
+            <stop offset="25%" stop-color="#FF6868FF" />
+            <stop offset="40%" stop-color="#00000000" />
+            <stop offset="70%" stop-color="#131028FF" />
         </linearGradient>
-        <linearGradient id="background3" x1="0" x2="1" y1="0.5" y2="0.5">
-            <stop offset="0%" stop-color="#000000" stop-opacity="0.933" />
-            <stop offset="25%" stop-color="#000000" stop-opacity="0" />
-            <stop offset="40%" stop-color="#D400FF" stop-opacity="1" />
-            <stop offset="70%" stop-color="#000000" stop-opacity="0" />
+        <linearGradient id="background3" x2="1" y2="0.5" x1="0" y1="0.5">
+            <stop offset="0%" stop-color="#000000EE" />
+            <stop offset="25%" stop-color="#00000000" />
+            <stop offset="40%" stop-color="#D400FFFF" />
+            <stop offset="70%" stop-color="#00000000" />
         </linearGradient>
-        <linearGradient id="background4" x1="0" x2="1" y1="0.5" y2="0.5">
-            <stop offset="0%" stop-color="#221797" stop-opacity="1" />
-            <stop offset="67%" stop-color="#7B72D9" stop-opacity="0.388" />
-            <stop offset="82%" stop-color="#776DDE" stop-opacity="0.737" />
-            <stop offset="100%" stop-color="#221797" stop-opacity="1" />
+        <linearGradient id="background4" x2="0.5" y2="1" x1="0.5" y1="0">
+            <stop offset="0%" stop-color="#221797FF" />
+            <stop offset="67%" stop-color="#7B72D963" />
+            <stop offset="82%" stop-color="#776DDEBC" />
+            <stop offset="100%" stop-color="#221797FF" />
         </linearGradient>
-        <linearGradient id="ray1" x1="0" x2="1" y1="0.5" y2="0.5">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="30%" stop-color="#9EACFE" stop-opacity="0.27" />
-            <stop offset="71%" stop-color="#9EACFE" stop-opacity="0.27" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="ray1" x2="1" y2="0.5" x1="0" y1="0.5">
+            <stop offset="0%" stop-color="#9EACFE00" />
+            <stop offset="38%" stop-color="#9EACFE45" />
+            <stop offset="71%" stop-color="#9EACFE5B" />
+            <stop offset="100%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray2" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stop-color="#675BE6" stop-opacity="0" />
-            <stop offset="40%" stop-color="#675BE6" stop-opacity="0.619" />
-            <stop offset="75%" stop-color="#AEA7F2" stop-opacity="0.619" />
-            <stop offset="100%" stop-color="#AEA7F2" stop-opacity="0" />
+        <linearGradient id="ray2" x2="1.21497695672982" y2="0.505740326241934" x1="-0.214976956729821" y1="0.494259673758067">
+            <stop offset="0%" stop-color="#9991EECB" />
+            <stop offset="79%" stop-color="#AEA7F200" />
         </linearGradient>
-        <linearGradient id="ray3" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0.549" />
-            <stop offset="45%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="ray2stroke" x2="0.5" y2="1" x1="0.5" y1="0">
+            <stop offset="0%" stop-color="#675BE600" />
+            <stop offset="40%" stop-color="#675BE69E" />
+            <stop offset="75%" stop-color="#AEA7F29E" />
+            <stop offset="100%" stop-color="#AEA7F200" />
         </linearGradient>
-        <linearGradient id="ray4" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="31%" stop-color="#9EACFE" stop-opacity="0.227" />
-            <stop offset="84%" stop-color="#9EACFE" stop-opacity="0.329" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="ray3" x2="1.5649998923939" y2="0.500411025020064" x1="-0.00499989239389898" y1="0.499588974979936">
+            <stop offset="0%" stop-color="#9EACFE8C" />
+            <stop offset="45%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray5" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="24%" stop-color="#9EACFE" stop-opacity="0.227" />
-            <stop offset="77%" stop-color="#9EACFE" stop-opacity="0.329" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="ray4" x2="1" y2="0.5" x1="0" y1="0.5">
+            <stop offset="0%" stop-color="#9EACFE00" />
+            <stop offset="31%" stop-color="#9EACFE3A" />
+            <stop offset="84%" stop-color="#9EACFE54" />
+            <stop offset="100%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray6" x1="-2.200671183919568" x2="0.680671183919568" y1="1.14426364055277"
-            y2="0.715736359447231">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="7%" stop-color="#9EACFE" stop-opacity="0.694" />
-            <stop offset="77%" stop-color="#9EACFE" stop-opacity="0.286" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="ray5" x2="1" y2="0.5" x1="0" y1="0.5">
+            <stop offset="0%" stop-color="#9EACFE00" />
+            <stop offset="24%" stop-color="#9EACFE23" />
+            <stop offset="77%" stop-color="#9EACFE27" />
+            <stop offset="100%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray7" x1="3.7315629281096E-07" x2="0.999999626843707" y1="0.499389134913768" y2="0.500610865086233">
-            <stop offset="1%" stop-color="#9EACFE" stop-opacity="0.549" />
-            <stop offset="53%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="ray6" x2="0.680671183919568" y2="0.715736359447231" x1="-0.200671183919568" y1="1.14426364055277">
+            <stop offset="0%" stop-color="#9EACFE00" />
+            <stop offset="7%" stop-color="#9EACFEB1" />
+            <stop offset="57%" stop-color="#9EACFE2B" />
+            <stop offset="70%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray8" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="27%" stop-color="#9EACFE" stop-opacity="0.184" />
-            <stop offset="69%" stop-color="#9EACFE" stop-opacity="0.168" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="ray7" x2="0.999999626843707" y2="0.500610865086233" x1="3.7315629281096E-07" y1="0.499389134913768">
+            <stop offset="1%" stop-color="#9EACFE8C" />
+            <stop offset="53%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray9" x1="0.265039147638324" x2="1.15496085236168" y1="0.165902530437917" y2="0.154097469562083">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="27%" stop-color="#9EACFE" stop-opacity="0.184" />
-            <stop offset="69%" stop-color="#9EACFE" stop-opacity="0.168" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="ray8" x2="1" y2="0.5" x1="0" y1="0.5">
+            <stop offset="0%" stop-color="#9EACFE00" />
+            <stop offset="27%" stop-color="#9EACFE2F" />
+            <stop offset="69%" stop-color="#9EACFE2B" />
+            <stop offset="100%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray10" x1="0.136004488733946" x2="0.743995511266054" y1="1.33415058347317" y2="0.465849416526834">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="27%" stop-color="#9EACFE" stop-opacity="0.184" />
-            <stop offset="69%" stop-color="#9EACFE" stop-opacity="0.168" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="ray9" gradientTransform="translate(0.32 -0.34) translate(0.5 0.5) rotate(-34.56) translate(-0.5 -0.5)" x2="1.15496085236168" y2="0.154097469562083" x1="0.265039147638324" y1="0.165902530437917s">
+            <stop offset="0%" stop-color="#9EACFE00" />
+            <stop offset="25%" stop-color="#9EACFE27" />
+            <stop offset="47%" stop-color="#9EACFE5B" />
+            <stop offset="100%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray11" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stop-color="#675BE6" stop-opacity="0" />
-            <stop offset="12%" stop-color="#AEA7F2" stop-opacity="0.721" />
-            <stop offset="77%" stop-color="#675BE6" stop-opacity="0.619" />
-            <stop offset="100%" stop-color="#AEA7F2" stop-opacity="0" />
+        <linearGradient id="ray10" x2="0.743995511266054" y2="0.465849416526834" x1="0.136004488733946" y1="1.33415058347317">
+            <stop offset="0%" stop-color="#9EACFE00" />
+            <stop offset="35%" stop-color="#9EACFEB1" />
+            <stop offset="67%" stop-color="#9EACFE49" />
+            <stop offset="100%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray12" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="53%" stop-color="#9EACFE" stop-opacity="0.329" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="ray11" x2="1.5649998923939" y2="0.500411025020064" x1="-0.00499989239389898" y1="0.499588974979936">
+            <stop offset="0%" stop-color="#9EACFE54" />
+            <stop offset="45%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray13" x1="0.30452010018973" x2="1.29547989981027" y1="0.137079571286679" y2="0.00292042871332132">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="77%" stop-color="#9EACFE" stop-opacity="1" />
+        <linearGradient id="ray12" x2="1" y2="0.5" x1="0" y1="0.5">
+            <stop offset="0%" stop-color="#9EACFE00" />
+            <stop offset="53%" stop-color="#9EACFE41" />
+            <stop offset="100%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray14" x1="0.265039147638324" x2="1.15496085236168" y1="0.165902530437917" y2="0.154097469562083">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="25%" stop-color="#9EACFE" stop-opacity="0.152" />
-            <stop offset="77%" stop-color="#9EACFE" stop-opacity="0.356" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="ray13" x2="1.32989732248879" y2="0.128900339159299" x1="0.130102677511208" y1="0.151099660840701">
+            <stop offset="0%" stop-color="#9EACFE00" />
+            <stop offset="30%" stop-color="#9EACFE15" />
+            <stop offset="84%" stop-color="#9EACFE32" />
+            <stop offset="100%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray15" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="29%" stop-color="#9EACFE" stop-opacity="0.227" />
-            <stop offset="67%" stop-color="#9EACFE" stop-opacity="0.239" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="ray14" x2="1" y2="0.5" x1="0" y1="0.5">
+            <stop offset="0%" stop-color="#9EACFE00" />
+            <stop offset="25%" stop-color="#9EACFE2F" />
+            <stop offset="73%" stop-color="#9EACFE2B" />
+            <stop offset="100%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray16" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="53%" stop-color="#9EACFE" stop-opacity="0.152" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="ray15" x2="0.639926414450301" y2="0.507954756935836" x1="-0.219926414450301" y1="0.492045243064164">
+            <stop offset="0%" stop-color="#9991EECB" />
+            <stop offset="79%" stop-color="#AEA7F200" />
         </linearGradient>
-        <linearGradient id="ray17" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="27%" stop-color="#9EACFE" stop-opacity="0.05" />
-            <stop offset="69%" stop-color="#9EACFE" stop-opacity="0.066" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="ray15stroke" x2="1" y2="0.5" x1="0" y1="0.5">
+            <stop offset="0%" stop-color="#675BE600" />
+            <stop offset="40%" stop-color="#675BE69E" />
+            <stop offset="75%" stop-color="#AEA7F29E" />
+            <stop offset="100%" stop-color="#AEA7F200" />
         </linearGradient>
-        <linearGradient id="ray18" x1="0.357596123493896" x2="1.3424038765061" y1="0.126824088833465" y2="0.0468240888334652">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="34%" stop-color="#9EACFE" stop-opacity="0.05" />
-            <stop offset="92%" stop-color="#9EACFE" stop-opacity="0.066" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="ray16" x2="0.999999626843707" y2="0.500610865086233" x1="3.7315629281096E-07" y1="0.499389134913768">
+            <stop offset="0%" stop-color="#9EACFE8C" />
+            <stop offset="100%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray19" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="27%" stop-color="#9EACFE" stop-opacity="0.458" />
-            <stop offset="69%" stop-color="#9EACFE" stop-opacity="0.329" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="Rectangle7_Copy2_fill" x2="1" y2="0.5" x1="0" y1="0.5">
+            <stop offset="0%" stop-color="#9EACFE00" />
+            <stop offset="30%" stop-color="#9EACFE45" />
+            <stop offset="71%" stop-color="#9EACFE5B" />
+            <stop offset="100%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray20" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0.549" />
-            <stop offset="45%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="Rectangle11_Copy3_fill" x2="1" y2="0.5" x1="0" y1="0.5">
+            <stop offset="0%" stop-color="#9EACFE00" />
+            <stop offset="27%" stop-color="#9EACFE0D" />
+            <stop offset="69%" stop-color="#9EACFE11" />
+            <stop offset="100%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray21" x1="3.7315629281096E-07" x2="0.999999626843707" y1="0.499389134913768" y2="0.500610865086233">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0.796" />
-            <stop offset="46%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="Rectangle17_Copy2_fill" x2="1" y2="0.5" x1="0" y1="0.5">
+            <stop offset="0%" stop-color="#9EACFE00" />
+            <stop offset="29%" stop-color="#9EACFE75" />
+            <stop offset="67%" stop-color="#9EACFE54" />
+            <stop offset="100%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray22" x1="-0.00499989239389898" x2="1.5649998923939" y1="0.499588974979936" y2="0.500411025020064">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0.329" />
-            <stop offset="45%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="Rectangle6_Copy3_fill" x2="1" y2="0.5" x1="0" y1="0.5">
+            <stop offset="0%" stop-color="#9EACFE00" />
+            <stop offset="53%" stop-color="#9EACFE41" />
+            <stop offset="100%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray23" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="53%" stop-color="#9EACFE" stop-opacity="0.254" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="Rectangle10_Copy1_fill" x2="1.32989732248879" y2="0.128900339159299" x1="0.130102677511208" y1="0.151099660840701">
+            <stop offset="0%" stop-color="#9EACFE00" />
+            <stop offset="30%" stop-color="#9EACFE15" />
+            <stop offset="84%" stop-color="#9EACFE32" />
+            <stop offset="100%" stop-color="#9EACFE00" />
         </linearGradient>
-        <linearGradient id="ray24" x1="0.130102677511208" x2="1.32989732248879" y1="0.151099660840701" y2="0.128900339159299">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="30%" stop-color="#9EACFE" stop-opacity="0.082" />
-            <stop offset="84%" stop-color="#9EACFE" stop-opacity="0.196" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="Rectangle3_fill" x2="0.945" y2="0.55" x1="0.055" y1="0.55">
+            <stop offset="0%" stop-color="#12127EFF" />
+            <stop offset="100%" stop-color="#12127E00" />
         </linearGradient>
-        <linearGradient id="ray25" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="25%" stop-color="#9EACFE" stop-opacity="0.184" />
-            <stop offset="73%" stop-color="#9EACFE" stop-opacity="0.168" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="Rectangle3ColorVariation_fill" x2="0.945" y2="0.55" x1="0.055" y1="0.55">
+            <stop offset="0%" stop-color="#00000099" />
+            <stop offset="100%" stop-color="#12127E00" />
         </linearGradient>
-        <linearGradient id="ray26" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="40%" stop-color="#9EACFE" stop-opacity="0.619" />
-            <stop offset="75%" stop-color="#9EACFE" stop-opacity="0.619" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="Rectangle1_fill" x2="0.490991225869847" y2="0.994908801878174" x1="0.509008774130153" y1="0.105091198121826">
+            <stop offset="0%" stop-color="#12127ED2" />
+            <stop offset="58%" stop-color="#12127E00" />
         </linearGradient>
-        <linearGradient id="ray27" x1="-0.219926414450301" x2="0.639926414450301" y1="0.492045243064164" y2="0.507954756935836">
-            <stop offset="0%" stop-color="#9991EE" stop-opacity="0.796" />
-            <stop offset="79%" stop-color="#AEA7F2" stop-opacity="0" />
+        <linearGradient id="Rectangle1COlorVariation_fill" x2="0.490991225869847" y2="0.994908801878174" x1="0.509008774130153" y1="0.105091198121826">
+            <stop offset="0%" stop-color="#00000066" />
+            <stop offset="58%" stop-color="#12127E00" />
         </linearGradient>
-        <linearGradient id="ray28" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="64%" stop-color="#9EACFE" stop-opacity="0.549" />
+        <linearGradient id="Rectangle4_fill" x2="0.5" y2="1" x1="0.5" y1="0">
+            <stop offset="0%" stop-color="#23159EFF" />
+            <stop offset="40%" stop-color="#372AB496" />
+            <stop offset="100%" stop-color="#5448D400" />
         </linearGradient>
-        <linearGradient id="ray29" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="30%" stop-color="#9EACFE" stop-opacity="0.27" />
-            <stop offset="71%" stop-color="#9EACFE" stop-opacity="0.356" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="Path8_Copy3_fill" gradientTransform="translate(0.01 0) translate(0.5 0.5) rotate(32.57) translate(-0.5 -0.5)" x2="0.558801542384554" y2="0.540881611134783" x1="0.461198457615446" y1="0.519118388865218">
+            <stop offset="14%" stop-color="#B9C3FE00" />
+            <stop offset="66%" stop-color="#9EACFE3D" />
+            <stop offset="100%" stop-color="#B9C3FE00" />
         </linearGradient>
-        <linearGradient id="ray30" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="27%" stop-color="#9EACFE" stop-opacity="0.05" />
-            <stop offset="69%" stop-color="#9EACFE" stop-opacity="0.066" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="Path8_Copy4_fill" gradientTransform="translate(0.01 0) translate(0.5 0.5) rotate(32.57) translate(-0.5 -0.5)" x2="0.558801542384554" y2="0.540881611134783" x1="0.461198457615446" y1="0.519118388865218">
+            <stop offset="8%" stop-color="#B9C3FE00" />
+            <stop offset="52%" stop-color="#9EACFE3D" />
+            <stop offset="93%" stop-color="#B9C3FE00" />
         </linearGradient>
-        <linearGradient id="ray31" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="29%" stop-color="#9EACFE" stop-opacity="0.458" />
-            <stop offset="67%" stop-color="#9EACFE" stop-opacity="0.329" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="Path8_Copy5_fill" gradientTransform="translate(0.01 0) translate(0.5 0.5) rotate(32.57) translate(-0.5 -0.5)" x2="0.558801542384554" y2="0.540881611134783" x1="0.461198457615446" y1="0.519118388865218">
+            <stop offset="8%" stop-color="#B9C3FE00" />
+            <stop offset="52%" stop-color="#9EACFE58" />
+            <stop offset="93%" stop-color="#B9C3FE00" />
         </linearGradient>
-        <linearGradient id="ray32" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="53%" stop-color="#9EACFE" stop-opacity="0.254" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="Path8_Copy1_fill" gradientTransform="translate(0 0.02) translate(0.5 0.5) rotate(35.06) translate(-0.5 -0.5)" x2="0.618155044294136" y2="0.540961524463904" x1="0.381844955705864" y1="0.499038475536096">
+            <stop offset="8%" stop-color="#B9C3FE00" />
+            <stop offset="52%" stop-color="#9EACFE58" />
+            <stop offset="93%" stop-color="#B9C3FE00" />
         </linearGradient>
-        <linearGradient id="ray33" x1="0.130102677511208" x2="1.32989732248879" y1="0.151099660840701" y2="0.128900339159299">
-            <stop offset="0%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="38%" stop-color="#9EACFE" stop-opacity="0.082" />
-            <stop offset="84%" stop-color="#9EACFE" stop-opacity="0.196" />
-            <stop offset="100%" stop-color="#9EACFE" stop-opacity="0" />
+        <linearGradient id="Path8_Copy10_fill" gradientTransform="translate(0 0.02) translate(0.5 0.5) rotate(31.87) translate(-0.5 -0.5)" x2="0.618155044294136" y2="0.540961524463904" x1="0.381844955705864" y1="0.499038475536096">
+            <stop offset="41%" stop-color="#9EACFE00" />
+            <stop offset="72%" stop-color="#B9C3FE1C" />
         </linearGradient>
-        <linearGradient id="ray34" x1="0.055" x2="0.945" y1="0.55" y2="0.55">
-            <stop offset="0%" stop-color="#12127E" stop-opacity="1" />
-            <stop offset="100%" stop-color="#12127E" stop-opacity="0" />
+        <linearGradient id="Path4_Copy1_stroke" x2="0.5" y2="1" x1="0.5" y1="0">
+            <stop offset="0%" stop-color="#675BE600" />
+            <stop offset="40%" stop-color="#675BE69E" />
+            <stop offset="75%" stop-color="#AEA7F29E" />
+            <stop offset="100%" stop-color="#AEA7F200" />
         </linearGradient>
-        <linearGradient id="ray35" x1="0.055" x2="0.945" y1="0.55" y2="0.55">
-            <stop offset="0%" stop-color="#000000" stop-opacity="0.6" />
-            <stop offset="100%" stop-color="#12127E" stop-opacity="0" />
+        <linearGradient id="Path4_Copy1_fill" gradientTransform="translate(-0.01 0) translate(0.5 0.5) rotate(25.46) scale(1.43 1.43) translate(-0.5 -0.5)" x2="1.20497695672982" y2="0.505740326241934" x1="-0.224976956729821" y1="0.494259673758067">
+            <stop offset="0%" stop-color="#9991EE5B" />
+            <stop offset="79%" stop-color="#AEA7F200" />
         </linearGradient>
-        <linearGradient id="ray36" x1="0.509008774130153" x2="0.490991225869847" y1="0.105091198121826" y2="0.994908801878174">
-            <stop offset="0%" stop-color="#12127E" stop-opacity="0.823" />
-            <stop offset="58%" stop-color="#12127E" stop-opacity="0" />
+        <linearGradient id="Path8_Copy9_fill" gradientTransform="translate(0 0) translate(0.5 0.5) rotate(33.48) translate(-0.5 -0.5)" x2="0.678688087798925" y2="0.517695700456179" x1="0.441311912201076" y1="0.482304299543821">
+            <stop offset="37%" stop-color="#9EACFE00" />
+            <stop offset="69%" stop-color="#CFD6FE8F" />
         </linearGradient>
-        <linearGradient id="ray37" x1="0.509008774130153" x2="0.490991225869847" y1="0.105091198121826" y2="0.994908801878174">
-            <stop offset="0%" stop-color="#000000" stop-opacity="0.4" />
-            <stop offset="58%" stop-color="#12127E" stop-opacity="0" />
+        <linearGradient id="Path8_fill" gradientTransform="translate(0.04 0.03) translate(0.5 0.5) rotate(28.5) translate(-0.5 -0.5)" x2="0.624841457865859" y2="0.535189125860463" x1="0.455158542134141" y1="0.524810874139537">
+            <stop offset="24%" stop-color="#9EACFE00" />
+            <stop offset="56%" stop-color="#B9C3FE1C" />
+            <stop offset="80%" stop-color="#E9ECFF4C" />
         </linearGradient>
-        <linearGradient id="ray38" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stop-color="#23159E" stop-opacity="1" />
-            <stop offset="40%" stop-color="#372AB4" stop-opacity="0.588" />
-            <stop offset="100%" stop-color="#5448D4" stop-opacity="0" />
+        <linearGradient id="Path8_Copy14_fill" gradientTransform="translate(0 0.02)" x2="0.619138413121191" y2="0.534354041903392" x1="0.380861586878809" y1="0.505645958096608">
+            <stop offset="41%" stop-color="#9EACFE00" />
+            <stop offset="72%" stop-color="#B9C3FE1C" />
         </linearGradient>
-        <linearGradient id="ray39" x1="0.461198457615446" x2="0.558801542384554" y1="0.519118388865218" y2="0.540881611134783">
-            <stop offset="14%" stop-color="#B9C3FE" stop-opacity="0" />
-            <stop offset="66%" stop-color="#9EACFE" stop-opacity="0.239" />
-            <stop offset="100%" stop-color="#B9C3FE" stop-opacity="0" />
-        </linearGradient>
-        <linearGradient id="ray40" x1="0.461198457615446" x2="0.519118388865218" y1="0.519118388865218" y2="0.540881611134783">
-            <stop offset="8%" stop-color="#B9C3FE" stop-opacity="0" />
-            <stop offset="52%" stop-color="#9EACFE" stop-opacity="0.239" />
-            <stop offset="96%" stop-color="#B9C3FE" stop-opacity="0" />
-        </linearGradient>
-        <linearGradient id="ray41" x1="0.461198457615446" x2="0.519118388865218" y1="0.558801542384554" y2="0.540881611134783">
-            <stop offset="8%" stop-color="#B9C3FE" stop-opacity="0" />
-            <stop offset="52%" stop-color="#9EACFE" stop-opacity="0.345" />
-            <stop offset="93%" stop-color="#B9C3FE" stop-opacity="0" />
-        </linearGradient>
-        <linearGradient id="ray42" x1="0.381844955705864" x2="0.618155044294136" y1="0.499038475536096" y2="0.540961524463904">
-            <stop offset="24%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="56%" stop-color="#B9C3FE" stop-opacity="0.196" />
-            <stop offset="80%" stop-color="#E9ECFF" stop-opacity="0.27" />
-        </linearGradient>
-        <linearGradient id="ray43" x1="0.380861586878809" x2="0.619138413121191" y1="0.505645958096608" y2="0.534354041903392">
-            <stop offset="41%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="72%" stop-color="#B9C3FE" stop-opacity="0.109" />
-        </linearGradient>
-        <linearGradient id="ray44" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stop-color="#675BE6" stop-opacity="1" />
-            <stop offset="40%" stop-color="#675BE6" stop-opacity="0.619" />
-            <stop offset="75%" stop-color="#AEA7F2" stop-opacity="0.619" />
-            <stop offset="100%" stop-color="#AEA7F2" stop-opacity="0" />
-        </linearGradient>
-        <linearGradient id="ray45" x1="-0.224976956729821" x2="1.20497695672982" y1="0.494259673758067" y2="0.505740326241934">
-            <stop offset="0%" stop-color="#9991EE" stop-opacity="0.356" />
-            <stop offset="79%" stop-color="#AEA7F2" stop-opacity="0" />
-        </linearGradient>
-        <linearGradient id="ray46" x1="0.441311912201076" x2="0.678688087798925" y1="0.482304299543821" y2="0.517695700456179">
-            <stop offset="0%" stop-color="#9991EE" stop-opacity="0.356" />
-            <stop offset="79%" stop-color="#AEA7F2" stop-opacity="0" />
-        </linearGradient>
-        <linearGradient id="ray47" x1="0.455158542134141" x2="0.624841457865859" y1="0.524810874139537" y2="0.535189125860463">
-            <stop offset="24%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="56%" stop-color="#B9C3FE" stop-opacity="0.082" />
-            <stop offset="80%" stop-color="#E9ECFF" stop-opacity="0.298" />
-        </linearGradient>
-        <linearGradient id="ray48" x1="0.380861586878809" x2="0.619138413121191" y1="0.505645958096608" y2="0.534354041903392">
-            <stop offset="41%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="72%" stop-color="#B9C3FE" stop-opacity="0.082" />
-        </linearGradient>
-        <linearGradient id="ray49" x1="0.380861586878809" x2="0.619138413121191" y1="0.505645958096608" y2="0.534354041903392">
-            <stop offset="40%" stop-color="#9EACFE" stop-opacity="0" />
-            <stop offset="75%" stop-color="#B9C3FE" stop-opacity="0.082" />
+        <linearGradient id="Path8_Copy15_fill" gradientTransform="translate(0 0.02) translate(0.5 0.5) rotate(31.87) translate(-0.5 -0.5)" x2="0.619138413121191" y2="0.534354041903392" x1="0.380861586878809" y1="0.505645958096608">
+            <stop offset="41%" stop-color="#9EACFE00" />
+            <stop offset="72%" stop-color="#B9C3FE1C" />
         </linearGradient>
     </defs>
     <g id="Background2">
-        <path id="Rectangle2_Copy1" d="M 0 0 L 802 0 L 802 603 L 0 603 Z" fill="url(#background)"
-            transform="translate(-0.5 -1.13)"></path>
-        <path id="Background2Colors" d="M 0 0 L 802 0 L 802 603 L 0 603 Z" fill="url(#background2)"
-            transform="translate(-0.5 -1.13)"></path>
-        <path id="Background3Colors" d="M 0 0 L 802 0 L 802 603 L 0 603 Z" fill="url(#background3)"
-            transform="translate(-0.5 -1.13)"></path>
-        <path id="Rectangle2" d="M 0 0 L 802 0 L 802 603 L 0 603 Z" fill="url(#background4)"
-            transform="translate(-0.5 -1.13)"></path>
+        <path id="Rectangle2_Copy1" d="M 0 0 L 802 0 L 802 603 L 0 603 Z" transform="translate(-0.5 -1.13)" fill="url(#background1)" />
+        <path id="Background2Colors" d="M 0 0 L 802 0 L 802 603 L 0 603 Z" transform="translate(-0.5 -1.13)" fill="url(#background2)" />
+        <path id="Background3Colors" d="M 0 0 L 802 0 L 802 603 L 0 603 Z" transform="translate(-0.5 -1.13)" fill="url(#background3)" />
+        <path id="Rectangle2" d="M 0 0 L 802 0 L 802 603 L 0 603 Z" transform="translate(-0.5 -1.13)" fill="url(#background4)" />
     </g>
     <g id="Rays">
         <g id="Group5">
-            <path id="Rectangle7" d="M 0 0 L 61 0 L 61 426 L 0 426 Z" transform="translate(370.5 2.86)"
-                fill="url(#ray1)" />
-            <path id="Path4" d="M 9.69 0 C 0.64 53.14 -2.18 106.47 1.69 160" stroke-width="1.3333333"
-                transform="translate(600.8 98.98)" fill="transparent" stroke="url(#ray2)" />
-            <path id="Path6_Copy4" d="M 10.53 0 C -0.60 85.75 -2.66 182.15 3.19 287.87" fill="url(#ray3)"
-                transform="translate(600.45 -28.78) scale(0.99 1) rotate(-2.51 0 0)" />
-            <path id="Rectangle7_Copy1" d="M 0 0 L 61 0 L 61 426 L 0 426 Z" transform="translate(230.5 -3.13)"
-                fill="url(#ray4)" />
+            <path id="Rectangle7" d="M 0 0 L 61 0 L 61 426 L 0 426 Z" transform="translate(370.5 2.86)" fill="url(#ray1)" />
+            <path id="Path4" d="M 9.69 0 C 0.64 53.14 -2.18 106.47 1.69 160" transform="translate(600.80 98.98)" fill="url(#ray2)" stroke-width="1.33333337306976" stroke="url(#ray2stroke)" />
+            <path id="Path6_Copy4" d="M 10.53 0 C -0.60 85.75 -2.66 182.15 3.19 287.87" transform="translate(600.45 -28.78) rotate(-2.51 5.26 143.93) scale(0.8 0.89)" fill="url(#ray3)" />
+            <path id="Rectangle7_Copy1" d="M 0 0 L 61 0 L 61 426 L 0 426 Z" transform="translate(230.5 -3.13)" fill="url(#ray4)" />
+            <path id="Rectangle8_Copy1" d="M 0 0 L 21.06 0 L 21.06 430.12 L 0 430.12 Z" transform="translate(534.23 -8.22) rotate(-177.77 10.53 215.06) scale(1 0.99) skewY(-6.83E-05)" fill="url(#ray5)" />
         </g>
-        <!-- validate transforms -->
-        <path id="Rectangle8_Copy1" d="M 0 0 L 21.06 0 L 21.06 430.12 L 0 430.12 Z"
-            transform=" translate(534.23 -8.22) scale(1 0.99) skewY(-6.83E-05)" fill="url(#ray5)" />
-    </g>
-    <g id="Group4">
-        <path id="Rectangle16" d="M 0.61 -2.25E-08 L 162.61 8.37 L 161.99 233.17 L 0 224.79 Z"
-            transform="rotate(-5.29) translate(59.19 213.21)" fill="url(#ray6)" />
-        <path id="Path6" d="M 17.23 0 C -0.98 102.77 -4.36 218.30 5.23 345" transform="translate(643.26 10.98)" fill="url(#ray7)" />
-        <path id="Rectangle11_Copy2" d="M 0 0 L 57.81 0 L 57.81 431 L 0 431 Z" transform="scale(1 0.99) rotate(0.96) translate(633.68 9.86)" fill="url(#ray8)" />
-        <!-- fix transform -->
-        <path id="Rectangle8" d="M 0.54 0.58 L 36.59 0 L 36.04 272.11 L -1.94E-08 272.70 Z" transform="scale(1 0.99) skewY(-6.83E-05) rotate(-177.77) translate(633.68 9.86)" fill="url(#ray9)" />
-        <path id="Rectangle16_Copy1" d="M 1.10 -7.64E-16 L 292.18 10.45 L 291.07 291.15 L 0 280.69 Z" transform="scale(0.99 1) rotate(-5.29) translate(-38.31 155.35)" fill="url(#ray10)" />
-        <path id="Path1" d="M 89 0 C 31.87 89.58 1.44 209.78 0 365" transform="translate(686.5 17.98)" stroke-width="1.33333337306976px" stroke="url(#ray11)" fill="transparent" />
-    </g>
-    <g id="Group3">
-        <path id="Rectangle6_Copy2" d="M 0 0 L 32.57 0 L 32.57 436.93 L 0 436.93 Z" transform="scale(0.99 1) skewX(-8.19E-05) rotate(1.76) translate(430.49 -10.21)" fill="url(#ray12)" />
-        <!-- transforms fixed from here -->
-        <path id="Rectangle14_Copy1" d="M 1.42E-14 5.51 L 105.41 0 L 120.61 298.07 L 15.19 303.58 Z" transform="translate(162.36 146.90) rotate(181.62 60.3 151.79)" fill="url(#ray13)" />
-        <path id="Rectangle8_Copy2" d="M 0.54 0.58 L 36.59 0 L 36.04 272.11 L -1.94E-08 272.70 Z" transform="translate(281.23 149.4) scale(1 0.99) skewY(-6.83E-05) rotate(-177.77 18.29 136.35)" fill="url(#ray14)" />
-        <path id="Rectangle17_Copy1" d="M 0 0 L 57.63 0 L 57.63 432.10 L 0 432.10 Z" transform="translate(124.72 -12.49)" fill="url(#ray15)" />
-    </g>
-    <g id="Group1">
-        <path id="Rectangle6" d="M 1.99 0 L 25.55 0 L 23.55 431.45 L 0 431.45 Z" transform="translate(506.01 -8.4) rotate(2.03 12.77 215.72)" fill="url(#ray16)" />
-        <path id="Rectangle11" d="M 0 0 L 57.81 0 L 57.81 447.96 L 0 447.96 Z" transform="translate(633.82 -7.10) rotate(0.96 28.9 223.98)" fill="url(#ray17)" />
-        <path id="Rectangle14" d="M -3.59E-07 4.93 L 105.41 0 L 120.61 266.64 L 15.19 271.57 Z" transform="translate(100.38 174.91) rotate(-180.06 60.30 135.78)" fill="url(#ray18)" />
-        <path id="Rectangle17" d="M 0 0 L 107.80 0 L 107.80 432.10 L 0 432.10 Z" transform="translate(290.5 -8.49) rotate(4.46 53.9 216.05)" fill="url(#ray19)" />
-        <path id="Path6_Copy2" d="M 10.53 0 C -0.60 132.99 -2.66 282.51 3.19 446.47" transform="translate(623.92 -16.86) scale(0.99 1) rotate(-2.51 5.26 223.23)" fill="url(#ray20)" />
-        <path id="Path6_Copy5" d="M 21.01 0 C 2.79 102.77 -5.58 256.30 4.01 382.99" transform="translate(637.48 -24.01)" fill="url(#ray21)" />
-        <path id="Path6_Copy3" d="M 10.53 0 C -0.60 132.99 -2.66 282.51 3.19 446.47" transform="translate(607.92 -16.86) scale(-0.99 1) rotate(2.51 5.26 223.23)" fill="url(#ray22)" />
-    </g>
-    <g id="Group2">
-        <path id="Rectangle6_Copy1" d="M 0 0 L 23.94 0 L 26.05 428.14 L 2.10 428.14 Z" transform="translate(494.44 -8.25) rotate(1.76 13.02 214.07)" fill="url(#ray23)" />
-        <path id="Rectangle10" d="M 0 0 L 40.14 0.06 L 40.14 396.06 L 0 396 Z" transform="translate(455.35 32.82) rotate(-179.07 20.07 198.03)" fill="url(#ray24)" />
-        <path id="Rectangle11_Copy1" d="M 0 0 L 53.42 0 L 53.42 431 L 0 431 Z" transform="translate(685.53 2.86) rotate(2.18 26.71 215.5)" fill="url(#ray25)" />
-        <path id="Path2" stroke-width="1.33333337306976px" d="M 24.39 0 C 4.33 60.95 -3.45 123.60 1.39 188" transform="translate(703.10 201.98)" fill="url(#ray27)" stroke="url(#ray26)" />
-        <path id="Path6_Copy1" d="M 10.53 0 C -0.60 111.71 -2.66 237.30 3.19 375.02" transform="translate(629.31 10.98) rotate(-2.51 5.26 187.51)" fill="url(#ray28)" />
-    </g>
-    <g id="MovingRays">
-        <path id="Rectangle7_Copy2" d="M 0 0 L 61 0 L 61 426 L 0 426 Z" transform="translate(370.5 2.86)" fill="url(#ray29)" />
-        <path id="Rectangle11_Copy3" d="M 0 0 L 57.81 0 L 57.81 447.96 L 0 447.96 Z" transform="translate(633.82 -7.10) rotate(0.96 28.9 223.98)" fill="url(#ray30)" />
-        <path id="Rectangle17_Copy2" d="M 0 0 L 107.80 0 L 107.80 432.10 L 0 432.10 Z" transform="translate(290.49 -8.49) scale(1 0.99) rotate(4.46 53.9 216.05)" fill="url(#ray31)" />
-        <path id="Rectangle6_Copy3" d="M 0 0 L 23.94 0 L 26.05 428.14 L 2.10 428.14 Z" transform="translate(494.44 -8.25) scale(0.99 1) rotate(1.76 13.02 214.07)" fill="url(#ray32)" />
-        <path id="Rectangle10_Copy1" d="M 0 0 L 40.14 0.06 L 40.14 396.06 L 0 396 Z" transform="translate(455.35 32.82) rotate(-179.07 20.07 198.03)" fill="url(#ray33)" />
+        <g id="Group4">
+            <path id="Rectangle16" d="M 0.61 -2.25E-08 L 162.61 8.37 L 161.99 233.17 L 0 224.79 Z" transform="translate(59.19 213.21) rotate(-5.29 81.30 116.58)" fill="url(#ray6)" />
+            <path id="Path6" d="M 17.23 0 C -0.98 102.77 -4.36 218.30 5.23 345" transform="translate(643.26 10.98)" fill="url(#ray7)" />
+            <path id="Rectangle11_Copy2" d="M 0 0 L 57.81 0 L 57.81 431 L 0 431 Z" transform="translate(633.68 9.86) rotate(0.96 28.90 215.5) scale(1 0.99)" fill="url(#ray8)" />
+            <path id="Rectangle8" d="M 0.54 0.58 L 36.59 0 L 36.04 272.11 L -1.94E-08 272.70 Z" transform="translate(552.23 149.40) translate(18.29 136.35) rotate(-177.77) skewY(-6.83E-05) scale(1 0.99) translate(-18.29 -136.35)" fill="url(#ray9)" />
+            <path id="Rectangle16_Copy1" d="M 1.10 -7.64E-16 L 292.18 10.45 L 291.07 291.15 L 0 280.69 Z" transform="translate(-38.31 155.35) rotate(-5.29 146.09 145.57) scale(0.99 1)" fill="url(#ray10)" />
+        </g>
+        <path id="Path6_Copy3" d="M 10.53 0 C -0.60 132.99 -2.66 282.51 3.19 446.47" transform="translate(607.92 16.86) rotate(2.51 5.26 223.23) scale(0.99 1)" fill="url(#ray11)" />
+        <g id="Group2">
+            <path id="Rectangle6_Copy1" d="M 0 0 L 23.94 0 L 26.05 428.14 L 2.10 428.14 Z" transform="translate(494.44 -8.25) rotate(1.76 13.02 214.07)" fill="url(#ray12)" />
+            <path id="Rectangle10" d="M 0 0 L 40.14 0.06 L 40.14 396.06 L 0 396 Z" transform="translate(455.35 32.82) rotate(-179.07 20.07 198.03)" fill="url(#ray13)" />
+            <path id="Rectangle11_Copy1" d="M 0 0 L 53.42 0 L 53.42 431 L 0 431 Z" transform="translate(685.53 2.86) rotate(2.18 26.71 215.5)" fill="url(#ray14)" />
+            <path id="Path2" d="M 24.39 0 C 4.33 60.95 -3.45 123.60 1.39 188" transform="translate(703.10 201.98)" stroke-width="1.33333337306976" fill="url(#ray15)" stroke="url(#ray15stroke)" />
+        </g>
+        <path id="Path6_Copy1" d="M 10.53 0 C -0.60 111.71 -2.66 237.30 3.19 375.02" transform="translate(629.31 10.98) scale(1 0.85)" fill="url(#ray16)" />
+        <g id="MovingRays">
+            <path id="Rectangle7_Copy2" d="M 0 0 L 61 0 L 61 426 L 0 426 Z" transform="translate(370.5 2.86)" fill="url(#Rectangle7_Copy2_fill)" />
+            <path id="Rectangle11_Copy3" d="M 0 0 L 57.81 0 L 57.81 447.96 L 0 447.96 Z" transform="translate(633.82 -7.10) rotate(0.96 28.90 223.98)" fill="url(#Rectangle11_Copy3_fill)" />
+            <path id="Rectangle17_Copy2" d="M 0 0 L 107.80 0 L 107.80 432.10 L 0 432.10 Z" transform="translate(290.49 -8.49) rotate(4.46 53.9 216.05) scale(1 0.99)" fill="url(#Rectangle17_Copy2_fill)" />
+            <path id="Rectangle6_Copy3" d="M 0 0 L 23.94 0 L 26.05 428.14 L 2.10 428.14 Z" transform="translate(494.44 -8.25) rotate(1.76 13.02 214.07) scale(0.99 1)" fill="url(#Rectangle6_Copy3_fill)" />
+            <path id="Rectangle10_Copy1" d="M 0 0 L 40.14 0.06 L 40.14 396.06 L 0 396 Z" transform="translate(455.35 32.82) rotate(-179.07 20.07 198.03)" fill="url(#Rectangle10_Copy1_fill)" />
+        </g>
     </g>
     <g id="LargeForegrounds">
-        <path id="Rectangle3" d="M 0 0 L 516.96 0 L 516.96 164.00 L 0 164.00 Z" transform="translate(0.5 436.86)" fill="url(#ray34)" />
-        <path id="Rectangle3ColorVariation" d="M 0 0 L 516.96 0 L 516.96 164.00 L 0 164.00 Z" transform="translate(0.5 436.86)" fill="url(#ray35)" />
-        <path id="Rectangle1" d="M 0 8.01 C 263.35 -2.65 530.64 -2.68 802 8.01 L 802 185.00 L 0 185.00 Z" transform="translate(-0.5 415.85)" fill="url(#ray36)" />
-        <path id="Rectangle1ColorVariation" d="M 0 8.01 C 263.35 -2.65 530.64 -2.68 802 8.01 L 802 185.00 L 0 185.00 Z" transform="translate(-0.5 415.85)" fill="url(#ray37)" />
-        <path id="Rectangle4" d="M 0 0 L 802 0 L 802 212.55 L 0 212.55 Z" transform="translate(-0.5 -0.13)" fill="url(#ray38)" />
+        <path id="Rectangle3" d="M 0 0 L 516.96 0 L 516.96 164.00 L 0 164.00 Z" transform="translate(0.5 436.86)" fill="url(#Rectangle3_fill)" />
+        <path id="Rectangle3ColorVariation" d="M 0 0 L 516.96 0 L 516.96 164.00 L 0 164.00 Z" transform="translate(0.5 436.86)" fill="url(#Rectangle3ColorVariation_fill)" />
+        <path id="Rectangle1" d="M 0 8.01 C 263.35 -2.65 530.64 -2.68 802 8.01 L 802 185.00 L 0 185.00 Z" transform="translate(-0.5 415.85)" fill="url(#Rectangle1_fill)" />
+        <path id="Rectangle1COlorVariation" d="M 0 8.01 C 263.35 -2.65 530.64 -2.68 802 8.01 L 802 185.00 L 0 185.00 Z" transform="translate(-0.5 415.85)" fill="url(#Rectangle1COlorVariation_fill)" />
+        <path id="Rectangle4" d="M 0 0 L 802 0 L 802 212.55 L 0 212.55 Z" transform="translate(-0.5 -0.13)" fill="url(#Rectangle4_fill)" />
     </g>
     <g id="ThinRays">
         <g id="BottomLights">
-            <path id="Path8_Copy3" d="M 361.96 -1.53E-07 C 400.82 61.96 75.41 695.61 -1.33E-07 770.20" transform="translate(244.95 100.04) scale(-0.99 0.99 182.58 385.10) rotate(121.98 182.58 385.1)" fill="url(#ray39)" />
-            <path id="Path8_Copy4" d="M 361.96 7.77E-08 C 400.82 61.96 75.41 695.61 -1.24E-07 770.20" transform="translate(255.34 95.30) scale(0.99 -0.99 182.58 385.10) rotate(-60.57 182.58 385.10)" fill="url(#ray40)" />
-            <path id="Path8_Copy5" d="M 361.96 7.77E-08 C 400.82 61.96 75.41 695.61 -1.24E-07 770.20" transform="translate(346.33 56.30) scale(0.99 -0.99 182.58 385.10) rotate(-62.42 182.58 385.10)" fill="url(#ray41)" />
+            <path id="Path8_Copy3" d="M 361.96 -1.53E-07 C 400.82 61.96 75.41 695.61 -1.33E-07 770.20" transform="translate(244.95 100.04) translate(182.58 385.10) rotate(121.98) scale(-0.99 0.99) translate(-182.58 -385.10)" fill="url(#Path8_Copy3_fill)" />
+            <path id="Path8_Copy4" d="M 361.96 7.77E-08 C 400.82 61.96 75.41 695.61 -1.24E-07 770.20" transform="translate(225.34 95.30) translate(182.58 385.10) rotate(-60.57) scale(0.99 -0.99) translate(-182.58 -385.10)" fill="url(#Path8_Copy4_fill)" />
+            <path id="Path8_Copy5" d="M 361.96 7.77E-08 C 400.82 61.96 75.41 695.61 -1.24E-07 770.20" transform="translate(346.33 56.30) translate(182.58 385.10) rotate(-62.42) scale(0.99 -0.99) translate(-182.58 -385.10)" fill="url(#Path8_Copy5_fill)" />
+            <path id="Path8_Copy6" d="M 105.08 0 C 88.41 94.60 28.55 211.61 0 258.66" transform="translate(70.77 28.63) translate(52.54 129.33) rotate(-6.61) scale(0.99 0.99) translate(-52.54 -129.33)" fill="transparent" />
         </g>
-        <path id="Path8_Copy1" d="M 105.08 0 C 88.41 94.60 28.55 211.61 0 258.66" transform="translate(70.77 145.63) scale(1 0.99) skewY(-1.36E-05) rotate(-8.38 52.54 129.33)" fill="url(#ray42)" />
-        <path id="Path8_Copy10" d="M 103.66 7.18E-09 C 83.93 110.48 33.79 250.38 0 305.33" transform="translate(93.58 49.8) scale(1 0.99) rotate(169.05 51.83 152.66)" fill="url(#ray43)" />
+        <path id="Path8_Copy1" d="M 105.08 0 C 88.41 94.60 28.55 211.61 0 258.66" transform="translate(70.77 145.63) translate(52.54 129.33) rotate(-8.30) skewY(-1.36E-05) scale(1 0.99) translate(-52.54 -129.33)" fill="url(#Path8_Copy1_fill)" />
+        <path id="Path8_Copy10" d="M 103.66 7.18E-09 C 83.93 110.48 33.79 250.38 0 305.33" transform="translate(93.58 49.80) translate(51.83 152.66) rotate(169.05) scale(1 0.99) translate(-51.83 -152.66)" fill="url(#Path8_Copy10_fill)" />
         <g id="Lights">
-            <path id="Path4_Copy1" d="M 9.69 0 C 0.64 53.14 -2.18 106.47 1.69 160" transform="translate(600.8 98.98)" stroke-width="1.33333337306976px" stroke="url(#ray44)" fill="url(#ray45)" />
-            <path id="Path8_Copy9" d="M 128.31 1.05E-08 C 93.69 110.82 33.79 246.63 0 301.57" transform="translate(57.68 -25.33) scale(-1 0.99 64.15 150.70) rotate(-154.73 64.15 150.70)" fill="url(#ray46)" />
+            <path id="Path4_Copy1" d="M 9.69 0 C 0.64 53.14 -2.18 106.47 1.69 160" transform="translate(600.80 98.98)" stroke-width="1.33333337306976" stroke="url(#Path4_Copy1_stroke)" fill="url(#Path4_Copy1_fill)" />
+            <path id="Path8_Copy9" d="M 128.31 1.05E-08 C 93.69 110.82 33.79 246.63 0 301.57" transform="translate(47.68 120.33) translate(64.15 150.78) rotate(-142.73) scale(-1 0.82) translate(-64.15 -158.78)" fill="url(#Path8_Copy9_fill)" />
         </g>
-        <g id="TopLeft2" transform="translate(-9 -15) rotate(-16.91 125.00 199.61)">
-            <path id="Path8" d="M 87.63 -3.94E-31 C 55.64 145.88 32.61 231.90 4.30E-09 310.56" transform="translate(96.54 28.53) rotate(3.86 43.81 155.28)" fill="url(#ray47)" />
+        <g id="TopLeft2" transform="translate(-9 -15) translate(125.00 199.61) rotate(-16.91) translate(-125.00 -199.61)">
+            <path id="Path8" d="M 87.63 -3.94E-31 C 55.64 145.88 32.61 231.90 4.30E-09 310.56" transform="translate(96.54 28.53) translate(43.81 155.28) rotate(5.86) translate(-43.81 -155.28)" fill="url(#Path8_fill)" />
         </g>
-        <path id="Path8_Copy14" d="M 103.66 7.18E-09 C 83.93 110.48 33.79 250.38 0 305.33" transform="translate(50.41 -68.18) scale(1 0.99) rotate(173.42 51.83 152.66)" fill="url(#ray48)" />
-        <path id="Path8_Copy15" d="M 103.66 7.18E-09 C 83.93 110.48 33.79 250.38 0 305.33" transform="translate(65.76 -163.15) scale(0.99 0.99) rotate(352.09 51.83 152.66)" fill="url(#ray49)" />
+        <path id="Path8_Copy14" d="M 103.66 7.18E-09 C 83.93 110.48 33.79 250.38 0 305.33" transform="translate(50.41 -68.18) translate(51.83 152.66) scale(1 0.99) translate(-51.83 -152.66)" fill="url(#Path8_Copy14_fill)" />
+        <path id="Path8_Copy15" d="M 103.66 7.18E-09 C 83.93 110.48 33.79 250.38 0 305.33" transform="translate(65.76 -163.15) translate(51.83 152.66) rotate(352.09) scale(0.99 0.99) translate(-51.83 -152.66)" fill="url(#Path8_Copy15_fill)" />
+        
     </g>
 </svg>
