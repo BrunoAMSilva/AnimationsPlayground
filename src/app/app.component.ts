@@ -88,6 +88,15 @@ const APP_ANIMATIONS: Animation[] = [
       },
     ],
   },
+  {
+    id: 2,
+    title: 'Desktop Aurora',
+    author: 'Bruno',
+    url: 'aurora.html',
+    preview: 'assets/aurora.png',
+    settings: [
+    ],
+  },
 ];
 
 @Component({
