@@ -97,6 +97,15 @@ const APP_ANIMATIONS: Animation[] = [
     settings: [
     ],
   },
+  {
+    id: 3,
+    title: 'Dawn',
+    author: 'Bruno',
+    url: 'dawn.html',
+    preview: 'assets/dawn.png',
+    settings: [
+    ],
+  },
 ];
 
 @Component({
