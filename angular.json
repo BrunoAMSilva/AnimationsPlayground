@@ -110,6 +110,9 @@
           }
         }
       }
-    }},
-  "defaultProject": "animations"
+    }
+  },
+  "cli": {
+    "analytics": false
+  }
 }
