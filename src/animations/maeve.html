@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Maeve</title>
+    <script>
+      function speak(text) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        speechSynthesis.speak(utterance);
+      }
+
+      document.addEventListener(
+        "click",
+        () => {
+          speak("Olá Lára! Vamos para casa?");
+        },
+        { once: true }
+      );
+
+      function casaSim() {
+        speak("Boa! Então senta-te e põe o cinto.");
+      }
+
+      function casaNao() {
+        speak("Temos que ir, Está a ficar tarde, pequenita. Senta-te na tua cadeira e põe o cinto que ainda temos uma viagem bonita pela frente.");
+      }
+    </script>
+  </head>
+  <body>
+    <button onclick="casaSim()">Sim</button>
+    <button onclick="casaNao()">Não</button>
+  </body>
+</html>

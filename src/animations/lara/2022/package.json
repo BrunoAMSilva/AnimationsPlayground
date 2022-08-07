@@ -1,0 +1,14 @@
+{
+  "name": "lara-2022",
+  "version": "1.0.0",
+  "description": "Parabéns Lara",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bruno Silva",
+  "license": "ISC",
+  "dependencies": {
+    "p5": "^1.4.2"
+  }
+}
