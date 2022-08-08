@@ -185,7 +185,7 @@ class Vehicle extends Particle {
     }
 
     behaviors() {
-        if (frameCount % 2000 === 0) {
+        if (frameCount % 800 === 0) {
             this.exploding = !this.exploding;
         }
 
