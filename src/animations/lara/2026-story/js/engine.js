@@ -651,7 +651,8 @@ class PhotoMontage {
     this.flyDur = 0.7;
     this.mergeDur = 0.5;                                      // a foto desfaz-se rápido (vira partículas)
     this.baseSize = m * (this.n > 24 ? 0.23 : 0.3);
-    this.stars = [];                                         // partículas que fazem a estrela crescer
+    this.stars = [];                                         // partículas (os pixels das fotos) que formam a estrela
+    this.perPhoto = Math.max(8, Math.min(30, Math.floor(1100 / Math.max(1, this.n))));
     this.items = [];
     for (let i = 0; i < this.n; i++) {
       const a = rnd(TWO_PI), R = m * 1.2;
@@ -707,12 +708,15 @@ class PhotoMontage {
     for (const it of this.items) {
       if (it.arr >= 1 && !it.burst) {
         it.burst = true;
-        if (this.stars.length < 1100) {
-          for (let k = 0; k < 12; k++) {
-            const hr = Math.sqrt(rnd()) * m * 0.13, ha = rnd(TWO_PI);   // casa numa esfera
-            this.stars.push({ x: it.tx + rnd(-1, 1) * it.size * 0.35, y: it.ty + rnd(-1, 1) * it.size * 0.22, vx: 0, vy: 0, hr, ha, sw: rnd(-0.012, 0.012), ph: rnd(TWO_PI), spd: rnd(0.04, 0.1) });
-          }
+        const grid = it.img && it.img.grid;
+        for (let k = 0; k < this.perPhoto; k++) {
+          const cell = grid ? grid[(k * 7) % grid.length] : null;
+          const u = cell ? cell.u : rnd(), v = cell ? cell.v : rnd();
+          const px = it.tx + (u - 0.5) * it.size, py = it.ty + (v - 0.5) * it.size * 0.72;  // posição na foto
+          const hr = Math.sqrt(rnd()) * m * 0.13, ha = rnd(TWO_PI);                          // casa na esfera
+          this.stars.push({ x: px, y: py, vx: 0, vy: 0, hr, ha, sw: rnd(-0.012, 0.012), ph: rnd(TWO_PI), spd: rnd(0.04, 0.1), r: cell ? cell.r : 200, g: cell ? cell.g : 226, b: cell ? cell.b : 255 });
         }
+        while (this.stars.length > 1100) this.stars.shift();
       }
     }
     const exploding = this.phase === "explode";
@@ -761,7 +765,7 @@ class PhotoMontage {
       push();
       translate(x, y); rotate(rot); scale(sc);
       drawingContext.globalAlpha = alpha;
-      drawPhotoCard(it.img, null, it.size, Math.min(1, this.core));
+      drawPhotoCard(it.img.bmp, null, it.size, Math.min(1, this.core));
       drawingContext.globalAlpha = 1;
       pop();
     }
@@ -773,12 +777,63 @@ class PhotoMontage {
     const explFade = this.phase === "explode" ? Math.max(0, 1 - this.explodeT / 0.45) : 1;
     for (const p of this.stars) {
       const tw = 0.55 + 0.45 * Math.sin(frameCount * p.spd + p.ph);
-      const a = 225 * tw * explFade;
-      fill(190, 226, 255, a); circle(p.x, p.y, 4.6 * tw);
-      fill(255, 255, 255, a * 0.85); circle(p.x, p.y, 2.2 * tw);
+      const a = 220 * tw * explFade;
+      fill(p.r, p.g, p.b, a); circle(p.x, p.y, 4.6 * tw);            // cor da foto
+      fill(255, 255, 255, a * 0.5); circle(p.x, p.y, 1.9 * tw);     // núcleo branco -> parece estrela
     }
     drawingContext.globalCompositeOperation = "source-over";
     pop();
+  }
+}
+
+/* Slideshow das fotos no final — passam em fundo; botão passa para 1º plano.
+   Carrega uma foto de cada vez (salta .mov/faltas) -> leve com centenas de fotos. */
+const _SLIDE_EXTS = ["jpeg", "jpg", "png", "webp"];
+class Slideshow {
+  constructor() {
+    this.mode = "bg";                 // "bg" | "fg"
+    this.idx = 0; this.maxTry = 1500;
+    this.cur = null; this.next = null; this.prev = null;
+    this.fade = 1; this.t = 0;
+    this._preload();
+  }
+  toggle() { this.mode = this.mode === "bg" ? "fg" : "bg"; }
+  _preload() {
+    const tryIdx = (guard) => {
+      this.idx++; if (this.idx > this.maxTry) this.idx = 1;
+      let e = 0;
+      const tryExt = () => {
+        if (e >= _SLIDE_EXTS.length) { if (guard < 60) tryIdx(guard + 1); return; }   // salta .mov/faltas
+        const im = new Image();
+        im.onload = () => { this.next = im; };
+        im.onerror = () => { e++; tryExt(); };
+        im.src = `assets/photos/${this.idx}.${_SLIDE_EXTS[e]}`;
+      };
+      tryExt();
+    };
+    tryIdx(0);
+  }
+  update(dt) {
+    if (!this.cur && this.next) { this.cur = this.next; this.next = null; this.fade = 0; this.t = 0; this._preload(); return; }
+    this.fade = Math.min(1, this.fade + dt / 450);
+    this.t += dt;
+    const interval = this.mode === "fg" ? 3200 : 2400;
+    if (this.t > interval && this.next) { this.prev = this.cur; this.cur = this.next; this.next = null; this.fade = 0; this.t = 0; this._preload(); }
+  }
+  _drawImg(img, alpha) {
+    if (!img || alpha <= 0.01 || !(img.naturalWidth || img.width)) return;
+    const iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height, ar = iw / ih, box = width / height;
+    let sw, sh, sx, sy;
+    if (ar > box) { sh = ih; sw = sh * box; sx = (iw - sw) / 2; sy = 0; }   // cover-fit ecrã inteiro
+    else { sw = iw; sh = sw / box; sx = 0; sy = (ih - sh) / 2; }
+    push(); drawingContext.globalAlpha = alpha;
+    drawingContext.drawImage(img, sx, sy, sw, sh, 0, 0, width, height);
+    drawingContext.globalAlpha = 1; pop();
+  }
+  draw() {
+    const baseA = this.mode === "fg" ? 0.97 : 0.16;
+    if (this.prev) this._drawImg(this.prev, baseA * (1 - this.fade));
+    this._drawImg(this.cur, baseA * this.fade);
   }
 }
 

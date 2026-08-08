@@ -20,30 +20,51 @@ function _photoExists(i) {
     return false;
   })();
 }
-// conta quantas fotos existem (1..N) por busca exponencial + binária (poucos pedidos)
-async function countPhotos(cap = 4000) {
-  if (!(await _photoExists(1))) return 0;
+// existe alguma foto perto do índice i (aguenta buracos de .mov)
+async function _existsNear(i) {
+  for (let d = 0; d < 3; d++) { if (await _photoExists(i + d)) return true; }
+  return false;
+}
+// conta ~quantas fotos existem (1..N), robusto a buracos de .mov
+async function countPhotos(cap = 3000) {
+  if (!(await _existsNear(1))) return 0;
   let hi = 1;
-  while (hi * 2 <= cap && await _photoExists(hi * 2)) hi *= 2;
+  while (hi * 2 <= cap && await _existsNear(hi * 2)) hi *= 2;
   let lo = hi, h2 = Math.min(hi * 2, cap);
-  while (lo < h2) { const mid = Math.ceil((lo + h2) / 2); if (await _photoExists(mid)) lo = mid; else h2 = mid - 1; }
-  return lo;
+  while (lo < h2) { const mid = Math.ceil((lo + h2) / 2); if (await _existsNear(mid)) lo = mid; else h2 = mid - 1; }
+  let last = lo;
+  for (let d = 0; d <= 5; d++) { if (await _photoExists(lo + d)) last = lo + d; }   // a última exata
+  return last;
 }
 // carrega a foto i, reduzida para ~targetW de largura (thumbnail, memória leve)
 async function loadPhoto(i, targetW) {
   for (const e of PHOTO_EXTS) {
-    const bmp = await new Promise(r => {
+    const res = await new Promise(r => {
       const im = new Image();
       im.onload = async () => {
         try {
           const s = Math.min(1, targetW / im.naturalWidth);
-          r(await createImageBitmap(im, { resizeWidth: Math.max(1, Math.round(im.naturalWidth * s)), resizeHeight: Math.max(1, Math.round(im.naturalHeight * s)), resizeQuality: "medium" }));
-        } catch (_) { r(im); }
+          const bmp = await createImageBitmap(im, { resizeWidth: Math.max(1, Math.round(im.naturalWidth * s)), resizeHeight: Math.max(1, Math.round(im.naturalHeight * s)), resizeQuality: "medium" });
+          // grelha de cores — a foto desfaz-se NESTAS partículas (cada uma com a cor do seu pixel)
+          let grid = null;
+          try {
+            const GX = 6, GY = 5;
+            const cv = document.createElement("canvas"); cv.width = GX; cv.height = GY;
+            const cc = cv.getContext("2d"); cc.drawImage(bmp, 0, 0, GX, GY);
+            const d = cc.getImageData(0, 0, GX, GY).data;
+            grid = [];
+            for (let gy = 0; gy < GY; gy++) for (let gx = 0; gx < GX; gx++) {
+              const o = (gy * GX + gx) * 4;
+              grid.push({ u: (gx + 0.5) / GX, v: (gy + 0.5) / GY, r: d[o], g: d[o + 1], b: d[o + 2] });
+            }
+          } catch (_) { grid = null; }
+          r({ bmp, grid });
+        } catch (_) { r(null); }
       };
       im.onerror = () => r(null);
       im.src = `assets/photos/${i}.${e}`;
     });
-    if (bmp) return bmp;
+    if (res && res.bmp) return res;
   }
   return null;
 }
@@ -117,6 +138,8 @@ function draw() {
   try {
     drawSpace();
     if (Story.started) { Story.update(); Story.draw(); }
+    const sb = document.getElementById("slideBtn");
+    if (sb) sb.style.display = Story.slideshow ? "flex" : "none";   // botão só no final
   } catch (e) {
     // rede de segurança: uma exceção nunca deve matar o loop de animação
     if (window.console) console.warn("draw recuperado:", e && e.message);
@@ -153,6 +176,7 @@ function begin() {
 function wireUI() {
   document.getElementById("startBtn").addEventListener("click", begin);
   document.getElementById("replayBtn").addEventListener("click", () => { Sound.stopMusic(); Story.start(); });
+  document.getElementById("slideBtn").addEventListener("click", () => { if (Story.slideshow) Story.slideshow.toggle(); });
   const calm = document.getElementById("calm"), sound = document.getElementById("sound");
   calm.addEventListener("change", () => (G.calm = calm.checked));
   sound.addEventListener("change", () => {

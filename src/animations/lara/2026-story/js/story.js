@@ -40,7 +40,7 @@ const Story = {
 
   start() {
     this.started = true; this.finale = false; this.i = -1; this.tapCount = 0; this.msgA = 0;
-    this.montage = null;
+    this.montage = null; this.slideshow = null;
     G.swarm.clear();
     G.fireworks.length = 0; G.hearts.length = 0; G.shockwaves.length = 0; G.flashes.length = 0;
     G.astro.pos.set(width * 0.5, -height * 0.2);   // entra de cima
@@ -132,6 +132,7 @@ const Story = {
     G.astro.setImg(AST.astroDance, () => AST.spriteDance);   // pose de dança (animada) no final
     G.astro.setTarget(width * 0.5, height * 0.68);
     Sound.fanfare(); Sound.playMusic();
+    if (AST.photos && AST.photos.length) this.slideshow = new Slideshow();   // fotos a passar em fundo
     this.flash(width / 2, height * 0.42, [190, 230, 255], 1.5);   // grande clarão de abertura do final
     ["heart", "triangle", "cross", "square", "circle"].forEach((sh, k) =>   // as cinco formas logo no arranque
       G.fireworks.push(new Firework(width * (0.18 + k * 0.16), height * (0.38 + (k % 2) * 0.16), sh)));
@@ -180,6 +181,7 @@ const Story = {
     if (this._heartT > hInt && G.hearts.length < 14 && this.phase !== "montage") { this._heartT = 0; this.spawnHeart(); }
 
     if (this.finale) {
+      if (this.slideshow) this.slideshow.update(dt);
       const gap = G.calm ? 1100 : 650;
       this._fwT = (this._fwT || 0) + dt;
       if (this._fwT > gap) { this._fwT = 0; G.fireworks.push(new Firework()); }
@@ -200,6 +202,7 @@ const Story = {
   },
 
   draw() {
+    if (this.slideshow && this.slideshow.mode === "bg") this.slideshow.draw();   // fotos a passar em fundo
     drawingContext.globalCompositeOperation = "lighter";   // brilho aditivo (barato, sem shadowBlur)
     G.flashes.forEach(f => f.draw());
     G.shockwaves.forEach(s => s.draw());
@@ -210,6 +213,7 @@ const Story = {
     G.astro.draw();
     if (this.montage) this.montage.draw();
     G.sparkles.draw();
+    if (this.slideshow && this.slideshow.mode === "fg") this.slideshow.draw();   // fotos em 1º plano
     if (this.finale) {
       push();
       textAlign(CENTER, CENTER); noStroke();
