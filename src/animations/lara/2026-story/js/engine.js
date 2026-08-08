@@ -668,6 +668,37 @@ class PhotoMontage {
     }
     this.t = 0; this.core = 0; this.phase = "gather"; this.bornT = 0; this.explodeT = 0; this.arrived = 0;
     this.onExplode = null;
+    this.captured = false;   // as partículas do texto ainda não foram "sugadas"
+  }
+  // gravidade + rotação: a estrela suga as partículas do texto que sobrou e fá-las orbitar
+  _pullSwarm(arrivedFrac) {
+    if (typeof G === "undefined" || !G.swarm) return;
+    const parts = G.swarm.parts;
+    if (!this.captured) {   // captura (uma vez) as partículas de texto ativas
+      this.captured = true;
+      for (const p of parts) {
+        if (!p.active) continue;
+        p._mCap = true;
+        const dx = p.pos.x - this.cx, dy = p.pos.y - this.cy;
+        p._mAng = Math.atan2(dy, dx); p._mRad = Math.hypot(dx, dy) || 1;
+        p._mRf = rnd(0.5, 1.15);                       // raio de órbita alvo (× raio da estrela)
+        p._mSpin = chance(0.85) ? 1 : -1;              // maioria roda no mesmo sentido
+        if (p._mMaxOrig == null) p._mMaxOrig = p.max;  // guarda o max original (uma vez)
+        p.max = 15;                                    // orbita depressa enquanto capturada
+      }
+    }
+    const rot = 0.02 + 0.055 * arrivedFrac;            // rotação acelera à medida que cresce
+    const pull = 0.015 + 0.06 * arrivedFrac;           // gravidade puxa mais forte à medida que cresce
+    for (const p of parts) {
+      if (!p._mCap || !p.active) continue;
+      p._mAng += p._mSpin * rot;
+      p._mRad += (this.starR * p._mRf - p._mRad) * pull;   // espiral para dentro
+      p.target.set(this.cx + Math.cos(p._mAng) * p._mRad, this.cy + Math.sin(p._mAng) * p._mRad);
+    }
+  }
+  _releaseSwarm() {   // devolve as partículas ao normal (para formarem o "Parabéns")
+    if (typeof G === "undefined" || !G.swarm) return;
+    for (const p of G.swarm.parts) if (p._mCap) { p._mCap = false; if (p._mMaxOrig != null) { p.max = p._mMaxOrig; p._mMaxOrig = null; } }
   }
   update(dt) {
     const s = Math.min(dt, 50) / 1000;
@@ -692,6 +723,7 @@ class PhotoMontage {
       this.core = 1 + this.bornT * 2.2;                   // super-brilho: a estrela nasce
       if (this.bornT > 0.6) {
         this.phase = "explode"; this.explodeT = 0;
+        this._releaseSwarm();   // liberta as partículas do texto -> vão formar o "Parabéns"
         for (const p of this.stars) { const a = Math.atan2(p.y - this.cy, p.x - this.cx) || rnd(TWO_PI); const sp = rnd(7, 17); p.vx = Math.cos(a) * sp; p.vy = Math.sin(a) * sp; }
         if (this.onExplode) this.onExplode(this.cx, this.cy);
       }
@@ -725,7 +757,9 @@ class PhotoMontage {
     while (this.stars.length > 1500) this.stars.shift();
     // a bola CRESCE de tamanho com o nº de fotos que já chegaram (fica GIGANTE no fim)
     const arrivedFrac = this.n ? Math.min(1, this.arrived / this.n) : 1;
-    this.starR = m * (0.04 + 0.20 * arrivedFrac);
+    this.starR = m * (0.05 + 0.25 * arrivedFrac);
+    // gravidade + rotação: suga as partículas do texto para orbitarem a estrela
+    if (this.phase !== "explode") this._pullSwarm(arrivedFrac);
     const exploding = this.phase === "explode";
     for (const p of this.stars) {
       if (exploding) { p.vx *= 0.99; p.vy *= 0.99; }
