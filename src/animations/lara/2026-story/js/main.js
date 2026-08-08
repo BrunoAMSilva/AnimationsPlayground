@@ -58,7 +58,13 @@ async function loadPhoto(i, targetW) {
               grid.push({ u: (gx + 0.5) / GX, v: (gy + 0.5) / GY, r: d[o], g: d[o + 1], b: d[o + 2] });
             }
           } catch (_) { grid = null; }
-          r({ bmp, grid });
+          let avg = null;
+          if (grid && grid.length) {
+            let R = 0, Gg = 0, B = 0;
+            for (const c of grid) { R += c.r; Gg += c.g; B += c.b; }
+            avg = { r: Math.round(R / grid.length), g: Math.round(Gg / grid.length), b: Math.round(B / grid.length) };
+          }
+          r({ bmp, grid, avg });
         } catch (_) { r(null); }
       };
       im.onerror = () => r(null);

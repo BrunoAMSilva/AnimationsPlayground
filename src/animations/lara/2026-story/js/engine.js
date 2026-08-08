@@ -649,10 +649,10 @@ class PhotoMontage {
     this.gatherDur = 3.0;                                     // sem fotos (só luz)
     this.stagger = this.n ? Math.max(0.11, Math.min(0.6, 9 / this.n)) : 0;   // muitas -> ritmo rápido
     this.flyDur = 0.7;
-    this.mergeDur = 0.5;                                      // a foto desfaz-se rápido (vira partículas)
+    this.mergeDur = 0.25;                                    // ao chegar, a foto some depressa (vira 1 partícula)
     this.baseSize = m * (this.n > 24 ? 0.23 : 0.3);
-    this.stars = [];                                         // partículas (os pixels das fotos) que formam a estrela
-    this.perPhoto = Math.max(8, Math.min(30, Math.floor(1100 / Math.max(1, this.n))));
+    this.stars = [];                                         // 1 partícula por foto -> formam a estrela
+    this.starR = m * 0.02;                                  // raio da estrela (cresce com cada foto)
     this.items = [];
     for (let i = 0; i < this.n; i++) {
       const a = rnd(TWO_PI), R = m * 1.2;
@@ -703,44 +703,41 @@ class PhotoMontage {
       if (this.explodeT > 0.45) this.phase = "done";
     }
 
-    // fotos que chegam desfazem-se em partículas -> a estrela cresce
+    // cada foto que chega vira 1 partícula
     const m = Math.min(width, height);
     for (const it of this.items) {
       if (it.arr >= 1 && !it.burst) {
         it.burst = true;
-        const grid = it.img && it.img.grid;
-        for (let k = 0; k < this.perPhoto; k++) {
-          const cell = grid ? grid[(k * 7) % grid.length] : null;
-          const u = cell ? cell.u : rnd(), v = cell ? cell.v : rnd();
-          const px = it.tx + (u - 0.5) * it.size, py = it.ty + (v - 0.5) * it.size * 0.72;  // posição na foto
-          const hr = Math.sqrt(rnd()) * m * 0.13, ha = rnd(TWO_PI);                          // casa na esfera
-          this.stars.push({ x: px, y: py, vx: 0, vy: 0, hr, ha, sw: rnd(-0.012, 0.012), ph: rnd(TWO_PI), spd: rnd(0.04, 0.1), r: cell ? cell.r : 200, g: cell ? cell.g : 226, b: cell ? cell.b : 255 });
-        }
-        while (this.stars.length > 1100) this.stars.shift();
+        const a0 = (it.img && it.img.avg) || { r: 200, g: 226, b: 255 };
+        const k = 255 / Math.max(a0.r, a0.g, a0.b, 1);   // normaliza p/ brilho máximo mantendo o tom da foto
+        this.stars.push({ x: it.tx, y: it.ty, vx: 0, vy: 0, hrFrac: Math.sqrt(rnd()), ha: rnd(TWO_PI), sw: rnd(-0.01, 0.01), ph: rnd(TWO_PI), spd: rnd(0.04, 0.1), r: Math.min(255, a0.r * k), g: Math.min(255, a0.g * k), b: Math.min(255, a0.b * k) });
       }
     }
+    // a estrela CRESCE de tamanho com o nº de fotos que já chegaram
+    const arrivedFrac = this.n ? Math.min(1, this.arrived / this.n) : 1;
+    this.starR = m * (0.03 + 0.15 * arrivedFrac);
     const exploding = this.phase === "explode";
     for (const p of this.stars) {
       if (exploding) { p.vx *= 0.99; p.vy *= 0.99; }
       else {
         p.ha += p.sw;                                          // roda devagar (a estrela cintila)
-        const tx = this.cx + Math.cos(p.ha) * p.hr, ty = this.cy + Math.sin(p.ha) * p.hr;
-        p.vx += (tx - p.x) * 0.03; p.vy += (ty - p.y) * 0.03; p.vx *= 0.82; p.vy *= 0.82;
+        const tx = this.cx + Math.cos(p.ha) * p.hrFrac * this.starR, ty = this.cy + Math.sin(p.ha) * p.hrFrac * this.starR;
+        p.vx += (tx - p.x) * 0.05; p.vy += (ty - p.y) * 0.05; p.vx *= 0.8; p.vy *= 0.8;
       }
       p.x += p.vx; p.y += p.vy;
     }
   }
   get explodeDone() { return this.phase === "done"; }
   draw() {
-    const m = Math.min(width, height);
     const ci = Math.min(1.3, this.core);
-    // 1) halo subtil de fundo
-    const cr = m * (0.06 + Math.min(1.2, this.core) * 0.14);
+    const explFade = this.phase === "explode" ? Math.max(0, 1 - this.explodeT / 0.45) : 1;
+    // 1) halo suave de fundo (cresce com a estrela)
+    const cr = this.starR * 1.9;
     push();
     drawingContext.globalCompositeOperation = "lighter";
     const g = drawingContext.createRadialGradient(this.cx, this.cy, 0, this.cx, this.cy, cr * 2.6);
-    g.addColorStop(0, `rgba(210,232,255,${0.12 + Math.min(1, ci) * 0.34})`);
-    g.addColorStop(0.5, `rgba(150,200,255,${0.05 + 0.08 * Math.min(1, ci)})`);
+    g.addColorStop(0, `rgba(220,236,255,${(0.16 + Math.min(1, ci) * 0.46) * explFade})`);
+    g.addColorStop(0.5, `rgba(150,200,255,${(0.06 + 0.12 * Math.min(1, ci)) * explFade})`);
     g.addColorStop(1, "rgba(120,190,255,0)");
     drawingContext.fillStyle = g; drawingContext.fillRect(0, 0, width, height);
     drawingContext.globalCompositeOperation = "source-over";
@@ -770,16 +767,28 @@ class PhotoMontage {
       pop();
     }
 
-    // 3) partículas da estrela POR CIMA — a estrela visível a crescer
+    // 3) núcleo quente — o coração brilhante da estrela (cresce e floresce ao nascer)
+    push();
+    drawingContext.globalCompositeOperation = "lighter";
+    const cb = this.starR * (0.85 + 0.35 * Math.min(1.4, this.core)) * explFade;
+    const ca = Math.min(1, 0.35 + this.core * 0.6) * explFade;
+    const cg = drawingContext.createRadialGradient(this.cx, this.cy, 0, this.cx, this.cy, Math.max(1, cb));
+    cg.addColorStop(0, `rgba(255,255,255,${0.95 * ca})`);
+    cg.addColorStop(0.3, `rgba(224,240,255,${0.6 * ca})`);
+    cg.addColorStop(1, "rgba(150,200,255,0)");
+    drawingContext.fillStyle = cg; drawingContext.fillRect(0, 0, width, height);
+    drawingContext.globalCompositeOperation = "source-over";
+    pop();
+
+    // 4) partículas da estrela POR CIMA — a estrela visível a crescer
     push();
     drawingContext.globalCompositeOperation = "lighter";
     noStroke();
-    const explFade = this.phase === "explode" ? Math.max(0, 1 - this.explodeT / 0.45) : 1;
     for (const p of this.stars) {
       const tw = 0.55 + 0.45 * Math.sin(frameCount * p.spd + p.ph);
-      const a = 220 * tw * explFade;
-      fill(p.r, p.g, p.b, a); circle(p.x, p.y, 4.6 * tw);            // cor da foto
-      fill(255, 255, 255, a * 0.5); circle(p.x, p.y, 1.9 * tw);     // núcleo branco -> parece estrela
+      const a = 235 * tw * explFade;
+      fill(p.r, p.g, p.b, a); circle(p.x, p.y, 7 * tw);              // cor da foto
+      fill(255, 255, 255, a * 0.6); circle(p.x, p.y, 3 * tw);       // núcleo branco -> estrela
     }
     drawingContext.globalCompositeOperation = "source-over";
     pop();
