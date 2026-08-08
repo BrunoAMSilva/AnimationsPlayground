@@ -703,19 +703,29 @@ class PhotoMontage {
       if (this.explodeT > 0.45) this.phase = "done";
     }
 
-    // cada foto que chega vira 1 partícula
+    // cada foto que chega DESFAZ-SE em várias partículas (explode nos seus "pixels")
+    // -> acumulam-se e formam uma bola gigante que vai crescendo
     const m = Math.min(width, height);
+    const per = Math.max(8, Math.min(20, Math.round(1050 / Math.max(1, this.n))));   // ~1000 partículas no total
     for (const it of this.items) {
       if (it.arr >= 1 && !it.burst) {
         it.burst = true;
-        const a0 = (it.img && it.img.avg) || { r: 200, g: 226, b: 255 };
-        const k = 255 / Math.max(a0.r, a0.g, a0.b, 1);   // normaliza p/ brilho máximo mantendo o tom da foto
-        this.stars.push({ x: it.tx, y: it.ty, vx: 0, vy: 0, hrFrac: Math.sqrt(rnd()), ha: rnd(TWO_PI), sw: rnd(-0.01, 0.01), ph: rnd(TWO_PI), spd: rnd(0.04, 0.1), r: Math.min(255, a0.r * k), g: Math.min(255, a0.g * k), b: Math.min(255, a0.b * k) });
+        const grid = it.img && it.img.grid;
+        for (let j = 0; j < per; j++) {
+          const cell = grid && grid.length ? grid[(j * 7 + 3) % grid.length] : null;
+          const k = cell ? 255 / Math.max(cell.r, cell.g, cell.b, 1) : 1;   // normaliza -> brilho máximo, mantém o tom
+          const r = cell ? Math.min(255, cell.r * k) : 210, g = cell ? Math.min(255, cell.g * k) : 230, b = cell ? Math.min(255, cell.b * k) : 255;
+          const u = cell ? cell.u : rnd(), v = cell ? cell.v : rnd();
+          const px = it.tx + (u - 0.5) * it.size, py = it.ty + (v - 0.5) * it.size * 0.7;   // sai de onde estava a foto
+          const ang = Math.atan2(py - it.ty, px - it.tx) || rnd(TWO_PI), pop = rnd(1, 4.5);
+          this.stars.push({ x: px, y: py, vx: Math.cos(ang) * pop, vy: Math.sin(ang) * pop, hrFrac: Math.sqrt(rnd()), ha: rnd(TWO_PI), sw: rnd(-0.008, 0.008), ph: rnd(TWO_PI), spd: rnd(0.04, 0.1), r, g, b });
+        }
       }
     }
-    // a estrela CRESCE de tamanho com o nº de fotos que já chegaram
+    while (this.stars.length > 1500) this.stars.shift();
+    // a bola CRESCE de tamanho com o nº de fotos que já chegaram (fica GIGANTE no fim)
     const arrivedFrac = this.n ? Math.min(1, this.arrived / this.n) : 1;
-    this.starR = m * (0.03 + 0.15 * arrivedFrac);
+    this.starR = m * (0.04 + 0.20 * arrivedFrac);
     const exploding = this.phase === "explode";
     for (const p of this.stars) {
       if (exploding) { p.vx *= 0.99; p.vy *= 0.99; }
@@ -770,8 +780,8 @@ class PhotoMontage {
     // 3) núcleo quente — o coração brilhante da estrela (cresce e floresce ao nascer)
     push();
     drawingContext.globalCompositeOperation = "lighter";
-    const cb = this.starR * (0.85 + 0.35 * Math.min(1.4, this.core)) * explFade;
-    const ca = Math.min(1, 0.35 + this.core * 0.6) * explFade;
+    const cb = this.starR * (0.5 + 0.4 * Math.min(1.4, this.core)) * explFade;
+    const ca = Math.min(1, 0.18 + this.core * 0.55) * explFade;
     const cg = drawingContext.createRadialGradient(this.cx, this.cy, 0, this.cx, this.cy, Math.max(1, cb));
     cg.addColorStop(0, `rgba(255,255,255,${0.95 * ca})`);
     cg.addColorStop(0.3, `rgba(224,240,255,${0.6 * ca})`);
@@ -786,9 +796,9 @@ class PhotoMontage {
     noStroke();
     for (const p of this.stars) {
       const tw = 0.55 + 0.45 * Math.sin(frameCount * p.spd + p.ph);
-      const a = 235 * tw * explFade;
-      fill(p.r, p.g, p.b, a); circle(p.x, p.y, 7 * tw);              // cor da foto
-      fill(255, 255, 255, a * 0.6); circle(p.x, p.y, 3 * tw);       // núcleo branco -> estrela
+      const a = 205 * tw * explFade;
+      fill(p.r, p.g, p.b, a); circle(p.x, p.y, 5 * tw);              // cor da foto
+      fill(255, 255, 255, a * 0.5); circle(p.x, p.y, 2 * tw);       // núcleo branco -> brilho
     }
     drawingContext.globalCompositeOperation = "source-over";
     pop();
@@ -832,15 +842,24 @@ class Slideshow {
   _drawImg(img, alpha) {
     if (!img || alpha <= 0.01 || !(img.naturalWidth || img.width)) return;
     const iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height, ar = iw / ih, box = width / height;
-    let sw, sh, sx, sy;
-    if (ar > box) { sh = ih; sw = sh * box; sx = (iw - sw) / 2; sy = 0; }   // cover-fit ecrã inteiro
-    else { sw = iw; sh = sw / box; sx = 0; sy = (ih - sh) / 2; }
     push(); drawingContext.globalAlpha = alpha;
-    drawingContext.drawImage(img, sx, sy, sw, sh, 0, 0, width, height);
+    if (this.mode === "fg") {
+      // contain: a foto fica TOTALMENTE visível (letterbox), sem cortar nada
+      let dw, dh;
+      if (ar > box) { dw = width; dh = width / ar; } else { dh = height; dw = height * ar; }
+      drawingContext.drawImage(img, 0, 0, iw, ih, (width - dw) / 2, (height - dh) / 2, dw, dh);
+    } else {
+      // cover: preenche o ecrã inteiro (fundo)
+      let sw, sh, sx, sy;
+      if (ar > box) { sh = ih; sw = sh * box; sx = (iw - sw) / 2; sy = 0; }
+      else { sw = iw; sh = sw / box; sx = 0; sy = (ih - sh) / 2; }
+      drawingContext.drawImage(img, sx, sy, sw, sh, 0, 0, width, height);
+    }
     drawingContext.globalAlpha = 1; pop();
   }
   draw() {
-    const baseA = this.mode === "fg" ? 0.97 : 0.16;
+    if (this.mode === "fg") { push(); noStroke(); fill(4, 6, 16, 210); rect(0, 0, width, height); pop(); }   // palco escuro p/ a foto inteira
+    const baseA = this.mode === "fg" ? 0.98 : 0.16;
     if (this.prev) this._drawImg(this.prev, baseA * (1 - this.fade));
     this._drawImg(this.cur, baseA * this.fade);
   }
