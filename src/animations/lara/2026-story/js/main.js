@@ -9,23 +9,59 @@ function preload() {
 // fallback estático (frame 0) enquanto os frames animados não descodificam
 function makeImg(src) { const im = new Image(); im.src = src; return im; }
 
-// carrega as fotos da Lara: assets/photos/1.jpg, 2.jpg, ... (para, .jpeg/.png/.webp) até faltar
-async function loadPhotos(max = 40) {
-  const exts = ["jpg", "jpeg", "png", "webp"];
-  const out = [];
-  for (let i = 1; i <= max; i++) {
-    let found = null;
-    for (const ext of exts) {
-      found = await new Promise(res => {
-        const im = new Image();
-        im.onload = () => res(im); im.onerror = () => res(null);
-        im.src = `assets/photos/${i}.${ext}`;
-      });
-      if (found) break;
+// fotos da Lara: assets/photos/1.jpg, 2.jpg, ... (também .jpeg/.png/.webp)
+const PHOTO_EXTS = ["jpg", "jpeg", "png", "webp"];
+function _photoExists(i) {
+  return (async () => {
+    for (const e of PHOTO_EXTS) {
+      const ok = await new Promise(r => { const im = new Image(); im.onload = () => r(true); im.onerror = () => r(false); im.src = `assets/photos/${i}.${e}`; });
+      if (ok) return true;
     }
-    if (!found) break;      // primeira em falta -> para
-    out.push(found);
+    return false;
+  })();
+}
+// conta quantas fotos existem (1..N) por busca exponencial + binária (poucos pedidos)
+async function countPhotos(cap = 4000) {
+  if (!(await _photoExists(1))) return 0;
+  let hi = 1;
+  while (hi * 2 <= cap && await _photoExists(hi * 2)) hi *= 2;
+  let lo = hi, h2 = Math.min(hi * 2, cap);
+  while (lo < h2) { const mid = Math.ceil((lo + h2) / 2); if (await _photoExists(mid)) lo = mid; else h2 = mid - 1; }
+  return lo;
+}
+// carrega a foto i, reduzida para ~targetW de largura (thumbnail, memória leve)
+async function loadPhoto(i, targetW) {
+  for (const e of PHOTO_EXTS) {
+    const bmp = await new Promise(r => {
+      const im = new Image();
+      im.onload = async () => {
+        try {
+          const s = Math.min(1, targetW / im.naturalWidth);
+          r(await createImageBitmap(im, { resizeWidth: Math.max(1, Math.round(im.naturalWidth * s)), resizeHeight: Math.max(1, Math.round(im.naturalHeight * s)), resizeQuality: "medium" }));
+        } catch (_) { r(im); }
+      };
+      im.onerror = () => r(null);
+      im.src = `assets/photos/${i}.${e}`;
+    });
+    if (bmp) return bmp;
   }
+  return null;
+}
+// carrega uma AMOSTRA de até maxShow fotos, distribuída por todo o ano (inclui sempre a última)
+async function loadPhotos(maxShow = 80, targetW = 240) {
+  const total = await countPhotos();
+  if (!total) return [];
+  let idxs;
+  if (total <= maxShow) idxs = Array.from({ length: total }, (_, k) => k + 1);
+  else {
+    const set = new Set();
+    for (let k = 0; k < maxShow; k++) set.add(1 + Math.round(k * (total - 1) / (maxShow - 1)));
+    set.add(total);                                  // a última = a estrela nasceu
+    idxs = [...set].sort((a, b) => a - b);
+  }
+  const out = [];
+  for (const i of idxs) { const bmp = await loadPhoto(i, targetW); if (bmp) out.push(bmp); }
+  if (window.console) console.log(`fotos: ${total} no total, ${out.length} na montagem`);
   return out;
 }
 
