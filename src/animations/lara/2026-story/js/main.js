@@ -86,6 +86,7 @@ function begin() {
   Sound.init(); Sound.resume();
   G.calm = document.getElementById("calm").checked;
   G.sound = document.getElementById("sound").checked;
+  Sound.playMusic();   // música desde o início (o clique em Começar é o gesto que desbloqueia o áudio)
   document.getElementById("start").classList.add("hidden");
   document.getElementById("hud").classList.remove("hidden");
   Story.start();
@@ -98,7 +99,7 @@ function wireUI() {
   calm.addEventListener("change", () => (G.calm = calm.checked));
   sound.addEventListener("change", () => {
     G.sound = sound.checked;
-    if (!G.sound) Sound.stopMusic(); else if (Story.finale) Sound.playMusic();
+    if (!G.sound) Sound.stopMusic(); else if (Story.started) Sound.playMusic();
   });
 }
 
