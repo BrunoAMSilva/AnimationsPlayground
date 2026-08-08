@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Uma história para a Lara ✨</title>
+  <link rel="stylesheet" href="styles/default.css?v=24">
+  <script src="vendor/p5.min.js"></script>
+  <script src="js/engine.js?v=24"></script>
+  <script src="js/story.js?v=24"></script>
+  <script src="js/main.js?v=24"></script>
+</head>
+<body>
+  <!-- Ecrã inicial (desbloqueia o áudio no primeiro toque) -->
+  <div id="start" class="start">
+    <div class="start-inner">
+      <p class="eyebrow">Uma história para a</p>
+      <h1 class="title">Lara</h1>
+      <button id="startBtn" class="begin">Começar ✨</button>
+      <div class="toggles">
+        <label><input type="checkbox" id="calm" checked> Modo calmo</label>
+        <label><input type="checkbox" id="sound" checked> Som</label>
+      </div>
+      <p class="hint">Toca no ecrã para avançares a história</p>
+    </div>
+  </div>
+
+  <!-- Controlos discretos durante a história -->
+  <div id="hud" class="hud hidden">
+    <button id="replayBtn" class="ctl" title="Recomeçar">↺</button>
+  </div>
+</body>
+</html>
