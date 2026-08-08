@@ -86,8 +86,13 @@ async function loadPhotos(maxShow = 80, targetW = 240) {
     set.add(total);                                  // a última = a estrela nasceu
     idxs = [...set].sort((a, b) => a - b);
   }
+  // carrega em lotes PARALELOS (muito mais rápido que 1 a 1) -> a montagem raramente espera
   const out = [];
-  for (const i of idxs) { const bmp = await loadPhoto(i, targetW); if (bmp) out.push(bmp); }
+  const BATCH = 12;
+  for (let s = 0; s < idxs.length; s += BATCH) {
+    const res = await Promise.all(idxs.slice(s, s + BATCH).map(i => loadPhoto(i, targetW)));
+    for (const r of res) if (r) out.push(r);
+  }
   if (window.console) console.log(`fotos: ${total} no total, ${out.length} na montagem`);
   return out;
 }
@@ -136,7 +141,11 @@ function setup() {
   G.shockwaves = [];
   G.flashes = [];
   AST.photos = [];
-  loadPhotos().then(ps => { AST.photos = ps; if (ps.length && window.console) console.log(ps.length + " fotos carregadas"); });
+  AST.photosDone = false;   // true = carregamento terminou (mesmo que 0 fotos, ex.: versão pública)
+  loadPhotos()
+    .then(ps => { AST.photos = ps; if (ps.length && window.console) console.log(ps.length + " fotos carregadas"); })
+    .catch(e => { if (window.console) console.warn("fotos falharam:", e && e.message); })
+    .finally(() => { AST.photosDone = true; });
   wireUI();
 }
 

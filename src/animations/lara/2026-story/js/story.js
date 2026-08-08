@@ -141,9 +141,15 @@ const Story = {
 
   startMontage() {
     this.phase = "montage";
+    Sound.whoosh();
+    // se as fotos ainda estão a carregar (vêm de disco, async), espera por elas
+    // antes de arrancar — senão a estrela nascia "só de luz", sem fotos.
+    if ((!AST.photos || !AST.photos.length) && !AST.photosDone) { this.montage = null; this.waitPhotos = 0; return; }
+    this._spawnMontage();
+  },
+  _spawnMontage() {
     this.montage = new PhotoMontage((AST.photos && AST.photos.length) ? AST.photos : null);
     this.montage.onExplode = (cx, cy) => this._explodeToFinale(cx, cy);
-    Sound.whoosh();
   },
 
   // a estrela nasce e explode: grande clarão + o "Parabéns Lara!" a nascer do centro
@@ -170,6 +176,12 @@ const Story = {
     G.flashes.forEach(f => f.update());
     for (let k = G.flashes.length - 1; k >= 0; k--) if (G.flashes[k].done()) G.flashes.splice(k, 1);
 
+    // à espera que as fotos acabem de carregar para arrancar a montagem
+    // (fotos vêm de disco, async; ou avança se já terminou, ou ao fim de 30s)
+    if (this.phase === "montage" && !this.montage && !this.finale) {
+      this.waitPhotos = (this.waitPhotos || 0) + dt / 1000;
+      if ((AST.photos && AST.photos.length) || AST.photosDone || this.waitPhotos > 30) this._spawnMontage();
+    }
     // montagem de fotos -> estrela nasce -> explode
     if (this.montage) { this.montage.update(dt); if (this.montage.explodeDone) this.montage = null; }
 
