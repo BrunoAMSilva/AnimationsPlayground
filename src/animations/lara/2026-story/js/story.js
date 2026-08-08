@@ -18,6 +18,7 @@ const STORY = [
   { text: "E hoje\nfazes 10 anos!",                  astro: [0.30, 0.26], hold: 3.0, excited: true },
   { text: "10",                                      astro: [0.78, 0.30], hold: 3.2, big: true, excited: true },
   { text: "Serás sempre a estrela\nmais brilhante\nna nossa galáxia!", astro: [0.50, 0.78], hold: 4.5, flash: true },
+  { montage: true },   // as fotos convergem -> a estrela nasce -> explode
   { finale: true },
 ];
 
@@ -39,6 +40,7 @@ const Story = {
 
   start() {
     this.started = true; this.finale = false; this.i = -1; this.tapCount = 0; this.msgA = 0;
+    this.montage = null;
     G.swarm.clear();
     G.fireworks.length = 0; G.hearts.length = 0; G.shockwaves.length = 0; G.flashes.length = 0;
     G.astro.pos.set(width * 0.5, -height * 0.2);   // entra de cima
@@ -51,6 +53,7 @@ const Story = {
     this.i++;
     if (this.i >= STORY.length) { this.i = STORY.length - 1; return; }
     const b = STORY[this.i];
+    if (b.montage) return this.startMontage();
     if (b.finale) return this.startFinale();
     // texto em partículas
     const lines = b.text.split("\n");
@@ -135,6 +138,22 @@ const Story = {
     for (let k = 0; k < 4; k++) this.spawnHeart();
   },
 
+  startMontage() {
+    this.phase = "montage";
+    this.montage = new PhotoMontage((AST.photos && AST.photos.length) ? AST.photos : null);
+    this.montage.onExplode = (cx, cy) => this._explodeToFinale(cx, cy);
+    Sound.whoosh();
+  },
+
+  // a estrela nasce e explode: grande clarão + o "Parabéns Lara!" a nascer do centro
+  _explodeToFinale(cx, cy) {
+    this.flash(cx, cy, [210, 235, 255], 1.8);
+    if (G.shockwaves.length < 6) G.shockwaves.push(new Shockwave(cx, cy, [200, 230, 255]));
+    this.startFinale();
+    const r = Math.min(width, height) * 0.04;
+    for (const p of G.swarm.parts) if (p.active) { p.pos.set(cx + rnd(-r, r), cy + rnd(-r, r)); p.vel.set(rnd(-7, 7), rnd(-7, 7)); }
+  },
+
   update() {
     if (!this.started) return;
     const dt = Math.min(deltaTime, 50);
@@ -150,12 +169,15 @@ const Story = {
     G.flashes.forEach(f => f.update());
     for (let k = G.flashes.length - 1; k >= 0; k--) if (G.flashes[k].done()) G.flashes.splice(k, 1);
 
+    // montagem de fotos -> estrela nasce -> explode
+    if (this.montage) { this.montage.update(dt); if (this.montage.explodeDone) this.montage = null; }
+
     // corações a subir (símbolos PlayStation em forma de coração)
     G.hearts.forEach(h => h.update());
     for (let k = G.hearts.length - 1; k >= 0; k--) if (G.hearts[k].done()) G.hearts.splice(k, 1);
     this._heartT = (this._heartT || 0) + dt;
     const hInt = this.finale ? (G.calm ? 700 : 430) : (G.calm ? 3200 : 2200);
-    if (this._heartT > hInt && G.hearts.length < 14) { this._heartT = 0; this.spawnHeart(); }
+    if (this._heartT > hInt && G.hearts.length < 14 && this.phase !== "montage") { this._heartT = 0; this.spawnHeart(); }
 
     if (this.finale) {
       const gap = G.calm ? 1100 : 650;
@@ -186,6 +208,7 @@ const Story = {
     drawingContext.globalCompositeOperation = "source-over";
     G.swarm.draw();
     G.astro.draw();
+    if (this.montage) this.montage.draw();
     G.sparkles.draw();
     if (this.finale) {
       push();

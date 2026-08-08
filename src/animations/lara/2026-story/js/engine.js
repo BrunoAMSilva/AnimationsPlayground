@@ -613,6 +613,124 @@ class LightFlash {
   }
 }
 
+/* =====================================================================
+   Montagem de fotos -> a estrela nasce -> explode para o "Parabéns"
+   Fotos vêm de posições aleatórias fora do ecrã, convergem para o centro
+   (que fica cada vez mais brilhante) até à última = a estrela nasce.
+   ===================================================================== */
+// desenha um cartão de foto (ou placeholder colorido) centrado na origem, largura = size
+function drawPhotoCard(img, col, size, glow) {
+  const w = size, h = size * 0.72, r = size * 0.06;
+  push();
+  rectMode(CENTER); noStroke();
+  if (glow > 0) { drawingContext.shadowBlur = 24 * glow; drawingContext.shadowColor = `rgba(150,210,255,${0.55 * glow})`; }
+  fill(246, 249, 255); rect(0, 0, w, h, r);          // moldura branca (polaroid)
+  drawingContext.shadowBlur = 0;
+  const pad = size * 0.05, iw = w - pad * 2, ih = h - pad * 2;
+  if (img && (img.naturalWidth || img.width)) {
+    const swh = img.naturalWidth || img.width, shh = img.naturalHeight || img.height;
+    const ar = swh / shh, box = iw / ih;
+    let sw, sh, sx, sy;
+    if (ar > box) { sh = shh; sw = sh * box; sx = (swh - sw) / 2; sy = 0; }
+    else { sw = swh; sh = sw / box; sx = 0; sy = (shh - sh) / 2; }
+    drawingContext.drawImage(img, sx, sy, sw, sh, -iw / 2, -ih / 2, iw, ih);   // cover-fit
+  } else {
+    fill(col[0], col[1], col[2]); rect(0, 0, iw, ih, r * 0.6);
+  }
+  pop();
+}
+
+class PhotoMontage {
+  constructor(images) {
+    const m = Math.min(width, height);
+    this.cx = width / 2; this.cy = height * 0.46;
+    this.usePH = !images || !images.length;
+    const n = this.usePH ? 8 : images.length;
+    this.n = n;
+    this.stagger = Math.max(0.3, Math.min(0.62, 3.8 / n));   // ritmo de chegada
+    this.flyDur = 1.0;
+    this.items = [];
+    for (let i = 0; i < n; i++) {
+      const a = rnd(TWO_PI), R = m * 1.2;
+      this.items.push({
+        img: this.usePH ? null : images[i],
+        col: this.usePH ? [rnd(120, 255), rnd(140, 255), rnd(170, 255)] : null,
+        sx: this.cx + Math.cos(a) * R, sy: this.cy + Math.sin(a) * R,   // fora do ecrã, aleatório
+        tx: this.cx + rnd(-1, 1) * m * 0.055, ty: this.cy + rnd(-1, 1) * m * 0.05,
+        rot0: rnd(-0.7, 0.7), rot1: rnd(-0.16, 0.16),
+        appear: i * this.stagger, arr: 0,
+        size: m * 0.3 * rnd(0.92, 1.08),
+        exdir: rnd(TWO_PI), ex: 0,
+      });
+    }
+    this.t = 0; this.core = 0; this.phase = "gather"; this.bornT = 0; this.explodeT = 0; this.arrived = 0;
+    this.onExplode = null;
+  }
+  update(dt) {
+    const s = Math.min(dt, 50) / 1000;
+    this.t += s;
+    if (this.phase === "gather") {
+      let arrived = 0;
+      for (const it of this.items) {
+        const local = this.t - it.appear;
+        it.arr = local <= 0 ? 0 : Math.min(1, local / this.flyDur);
+        if (it.arr >= 1) arrived++;
+      }
+      this.arrived = arrived;
+      this.core = arrived / this.n;                       // brilho cresce com as fotos
+      if (arrived >= this.n) { this.phase = "born"; this.bornT = 0; }
+    } else if (this.phase === "born") {
+      this.bornT += s;
+      this.core = 1 + this.bornT * 2.2;                   // super-brilho: a estrela nasce
+      if (this.bornT > 0.6) { this.phase = "explode"; this.explodeT = 0; if (this.onExplode) this.onExplode(this.cx, this.cy); }
+    } else if (this.phase === "explode") {
+      this.explodeT += s;
+      const k = this.explodeT / 0.45;
+      for (const it of this.items) it.ex = k;             // fotos disparam para fora
+      this.core = Math.max(0, 2 - k * 5);
+      if (this.explodeT > 0.45) this.phase = "done";
+    }
+  }
+  get explodeDone() { return this.phase === "done"; }
+  draw() {
+    const m = Math.min(width, height);
+    // núcleo da estrela — brilho aditivo que preenche o centro
+    const ci = Math.min(1.3, this.core);
+    const cr = m * (0.05 + Math.min(1.2, this.core) * 0.18);
+    push();
+    drawingContext.globalCompositeOperation = "lighter";
+    const g = drawingContext.createRadialGradient(this.cx, this.cy, 0, this.cx, this.cy, cr * 2.4);
+    g.addColorStop(0, `rgba(255,255,255,${0.45 + Math.min(1, ci) * 0.55})`);
+    g.addColorStop(0.3, `rgba(185,225,255,${0.15 + Math.min(1, ci) * 0.3})`);
+    g.addColorStop(1, "rgba(120,190,255,0)");
+    drawingContext.fillStyle = g; drawingContext.fillRect(0, 0, width, height);
+    drawingContext.globalCompositeOperation = "source-over";
+    pop();
+    // fotos
+    for (const it of this.items) {
+      if (it.arr <= 0 && this.phase === "gather") continue;
+      const e = easeOutCubic(it.arr);
+      let x = it.sx + (it.tx - it.sx) * e, y = it.sy + (it.ty - it.sy) * e;
+      let rot = it.rot0 + (it.rot1 - it.rot0) * e;
+      let alpha = 1, sc = 0.6 + 0.4 * e;
+      if (this.phase === "explode") {
+        const d = it.ex * m * 0.95;
+        x = it.tx + Math.cos(it.exdir) * d; y = it.ty + Math.sin(it.exdir) * d;
+        rot += it.ex * 2.2; alpha = Math.max(0, 1 - it.ex); sc = 1 + it.ex * 0.5;
+      } else if (this.phase === "born") {
+        sc = 1 + Math.sin(this.bornT * 12) * 0.02;
+      }
+      if (alpha <= 0.02) continue;
+      push();
+      translate(x, y); rotate(rot); scale(sc);
+      drawingContext.globalAlpha = alpha;
+      drawPhotoCard(it.img, it.col, it.size, Math.min(1, this.core));
+      drawingContext.globalAlpha = 1;
+      pop();
+    }
+  }
+}
+
 class Firework {
   constructor(x, y, shape = null) {
     this.pos = createVector(x ?? rnd(width * 0.15, width * 0.85), y ?? height);

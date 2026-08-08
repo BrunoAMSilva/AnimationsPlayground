@@ -9,6 +9,26 @@ function preload() {
 // fallback estático (frame 0) enquanto os frames animados não descodificam
 function makeImg(src) { const im = new Image(); im.src = src; return im; }
 
+// carrega as fotos da Lara: assets/photos/1.jpg, 2.jpg, ... (para, .jpeg/.png/.webp) até faltar
+async function loadPhotos(max = 40) {
+  const exts = ["jpg", "jpeg", "png", "webp"];
+  const out = [];
+  for (let i = 1; i <= max; i++) {
+    let found = null;
+    for (const ext of exts) {
+      found = await new Promise(res => {
+        const im = new Image();
+        im.onload = () => res(im); im.onerror = () => res(null);
+        im.src = `assets/photos/${i}.${ext}`;
+      });
+      if (found) break;
+    }
+    if (!found) break;      // primeira em falta -> para
+    out.push(found);
+  }
+  return out;
+}
+
 // descodifica TODOS os frames do webp animado (WebCodecs) -> animação determinística
 async function loadSprite(src, targetW) {
   if (typeof ImageDecoder === "undefined") return null;
@@ -52,6 +72,8 @@ function setup() {
   G.hearts = [];
   G.shockwaves = [];
   G.flashes = [];
+  AST.photos = [];
+  loadPhotos().then(ps => { AST.photos = ps; if (ps.length && window.console) console.log(ps.length + " fotos carregadas"); });
   wireUI();
 }
 
