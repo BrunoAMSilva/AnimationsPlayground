@@ -647,10 +647,11 @@ class PhotoMontage {
     const imgs = images || [];
     this.n = imgs.length;                 // 0 = a estrela nasce só de luz (público, sem fotos)
     this.gatherDur = 3.0;                                     // sem fotos (só luz)
-    this.stagger = this.n ? Math.max(0.11, Math.min(0.6, 9 / this.n)) : 0;   // muitas -> ritmo rápido
-    this.flyDur = 0.7;
-    this.mergeDur = 0.25;                                    // ao chegar, a foto some depressa (vira 1 partícula)
-    this.baseSize = m * (this.n > 24 ? 0.23 : 0.3);
+    // ritmo: todas as fotos chegam em ~14s, por muitas que sejam (859 -> ~0.016s entre cada)
+    this.stagger = this.n ? Math.max(0.014, Math.min(0.35, 14 / this.n)) : 0;
+    this.flyDur = this.n > 200 ? 0.5 : 0.7;                  // com muitas fotos, entram mais depressa
+    this.mergeDur = this.n > 200 ? 0.18 : 0.25;             // ao chegar, a foto some depressa (vira partículas)
+    this.baseSize = m * (this.n > 200 ? 0.15 : this.n > 24 ? 0.23 : 0.3);   // muitas -> cartões mais pequenos
     this.stars = [];                                         // 1 partícula por foto -> formam a estrela
     this.starR = m * 0.02;                                  // raio da estrela (cresce com cada foto)
     this.items = [];
@@ -738,7 +739,8 @@ class PhotoMontage {
     // cada foto que chega DESFAZ-SE em várias partículas (explode nos seus "pixels")
     // -> acumulam-se e formam uma bola gigante que vai crescendo
     const m = Math.min(width, height);
-    const per = Math.max(8, Math.min(20, Math.round(1050 / Math.max(1, this.n))));   // ~1000 partículas no total
+    // partículas por foto: adapta-se para TODAS as fotos caberem (~1700 no total, sem largar nenhuma)
+    const per = Math.max(1, Math.min(16, Math.round(1500 / Math.max(1, this.n))));
     for (const it of this.items) {
       if (it.arr >= 1 && !it.burst) {
         it.burst = true;
@@ -754,7 +756,7 @@ class PhotoMontage {
         }
       }
     }
-    while (this.stars.length > 1500) this.stars.shift();
+    while (this.stars.length > 2200) this.stars.shift();
     // a bola CRESCE de tamanho com o nº de fotos que já chegaram (fica GIGANTE no fim)
     const arrivedFrac = this.n ? Math.min(1, this.arrived / this.n) : 1;
     this.starR = m * (0.05 + 0.25 * arrivedFrac);

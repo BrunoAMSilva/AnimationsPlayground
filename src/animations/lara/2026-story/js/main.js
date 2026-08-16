@@ -79,8 +79,8 @@ async function loadPhoto(i, targetW) {
   }
   return null;
 }
-// carrega uma AMOSTRA de até maxShow fotos, distribuída por todo o ano (inclui sempre a última)
-async function loadPhotos(maxShow = 64, targetW = 240) {
+// carrega TODAS as fotos (até maxShow); com as miniaturas leves dá para as ter todas na estrela
+async function loadPhotos(maxShow = 4000, targetW = 160) {
   const total = await countPhotos();
   if (!total) return [];
   let idxs;
@@ -91,15 +91,22 @@ async function loadPhotos(maxShow = 64, targetW = 240) {
     set.add(total);                                  // a última = a estrela nasceu
     idxs = [...set].sort((a, b) => a - b);
   }
-  // carrega em lotes PEQUENOS e CEDE o fio principal ao browser entre cada lote
+  // carrega em lotes e CEDE o fio principal ao browser entre cada lote (miniaturas -> leve)
   // (assim o clique em "Começar" e a animação nunca congelam durante o carregamento)
   const out = [];
-  const BATCH = 3;
-  const yieldFrame = () => new Promise(r => (typeof requestAnimationFrame === "function" ? requestAnimationFrame(() => r()) : setTimeout(r, 0)));
+  const BATCH = 8;
+  // resolve no próximo frame OU passados 32ms — nunca fica preso se o rAF não disparar
+  // (ex.: separador em segundo plano), mas cede na mesma para o browser desenhar
+  const yieldFrame = () => new Promise(r => {
+    let done = false; const fin = () => { if (!done) { done = true; r(); } };
+    if (typeof requestAnimationFrame === "function") requestAnimationFrame(fin);
+    setTimeout(fin, 32);
+  });
   for (let s = 0; s < idxs.length; s += BATCH) {
     const res = await Promise.all(idxs.slice(s, s + BATCH).map(i => loadPhoto(i, targetW)));
     for (const r of res) if (r) out.push(r);
-    await yieldFrame();   // deixa o browser desenhar um frame entre lotes -> sem freeze
+    if (typeof AST !== "undefined") AST.photos = out;   // progressivo: dá para ver o progresso
+    await yieldFrame();
   }
   if (window.console) console.log(`fotos: ${total} no total, ${out.length} na montagem`);
   return out;

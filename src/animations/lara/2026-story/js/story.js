@@ -143,9 +143,10 @@ const Story = {
   startMontage() {
     this.phase = "montage";
     Sound.whoosh();
-    // se as fotos ainda estão a carregar (vêm de disco, async), espera por elas
-    // antes de arrancar — senão a estrela nascia "só de luz", sem fotos.
-    if ((!AST.photos || !AST.photos.length) && !AST.photosDone) { this.montage = null; this.waitPhotos = 0; return; }
+    // espera que TODAS as fotos acabem de carregar antes de arrancar (AST.photos é
+    // preenchido progressivamente; só com photosDone é que estão todas) — senão a
+    // estrela arrancava com um punhado de fotos.
+    if (!AST.photosDone) { this.montage = null; this.waitPhotos = 0; return; }
     this._spawnMontage();
   },
   _spawnMontage() {
@@ -181,7 +182,7 @@ const Story = {
     // (fotos vêm de disco, async; ou avança se já terminou, ou ao fim de 30s)
     if (this.phase === "montage" && !this.montage && !this.finale) {
       this.waitPhotos = (this.waitPhotos || 0) + dt / 1000;
-      if ((AST.photos && AST.photos.length) || AST.photosDone || this.waitPhotos > 30) this._spawnMontage();
+      if (AST.photosDone || this.waitPhotos > 60) this._spawnMontage();
     }
     // montagem de fotos -> estrela nasce -> explode
     if (this.montage) { this.montage.update(dt); if (this.montage.explodeDone) this.montage = null; }
