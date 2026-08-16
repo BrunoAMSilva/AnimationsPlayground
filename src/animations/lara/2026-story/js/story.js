@@ -97,32 +97,33 @@ const Story = {
     Sound.whoosh();
   },
 
-  spawnHeart(x, y, size) {
+  spawnHeart(x, y, size, manual) {
     const m = Math.min(width, height);
     x = x ?? rnd(width * 0.12, width * 0.88);
     y = y ?? rnd(height * 0.5, height * 0.86);   // dentro do ecrã (florescem à vista, já não sobem de fora)
     size = size ?? rnd(m * 0.1, m * 0.17);
-    G.hearts.push(new PsHeart(x, y, size));
+    const h = new PsHeart(x, y, size); h.manual = !!manual; G.hearts.push(h);
   },
 
-  flash(x, y, color, strength) {
-    G.flashes.push(new LightFlash(x, y, color, strength));
+  flash(x, y, color, strength, manual) {
+    const fl = new LightFlash(x, y, color, strength); fl.manual = !!manual; G.flashes.push(fl);
   },
 
   // rebentamento espetacular no ponto tocado (várias formas + onda de choque + faíscas + coração + luz)
+  // tudo marcado como "manual" -> pode aparecer por cima das fotos em full screen
   celebrateAt(x, y) {
     const m = Math.min(width, height);
     const pool = ["heart", "triangle", "cross", "square", "circle"];
     const nBursts = G.fireworks.length > 24 ? 1 : 3;   // trava se já estiver muito carregado
     for (let k = 0; k < nBursts; k++) {
       const fw = new Firework(x, y, pool[floor(rnd(pool.length))]);
-      fw.explode();                                     // rebenta já onde ela tocou
+      fw.explode(); fw.manual = true;                   // rebenta já onde ela tocou
       G.fireworks.push(fw);
     }
-    if (G.shockwaves.length < 6) G.shockwaves.push(new Shockwave(x, y));
+    if (G.shockwaves.length < 6) { const sw = new Shockwave(x, y); sw.manual = true; G.shockwaves.push(sw); }
     G.sparkles.burst(x, y, 30, [255, 240, 180]);
-    this.spawnHeart(x, y, m * 0.16);
-    this.flash(x, y, [180, 225, 255], 0.7);
+    this.spawnHeart(x, y, m * 0.16, true);
+    this.flash(x, y, [180, 225, 255], 0.7, true);
   },
 
   startFinale() {
@@ -216,15 +217,15 @@ const Story = {
   draw() {
     const fg = !!(this.slideshow && this.slideshow.mode === "fg");
     if (this.slideshow && this.slideshow.mode === "bg") this.slideshow.draw();   // fotos a passar em fundo
-    if (!fg) this._drawFX();                       // fogo de artifício por trás do conteúdo normal
+    this._drawFX(fg ? "auto" : null);              // foguetes AUTOMÁTICOS ficam sempre no fundo
     G.swarm.draw();
     G.astro.draw();
     if (this.montage) this.montage.draw();
     if (!fg) G.sparkles.draw();
     if (fg) {
       this.slideshow.draw();                       // foto em full screen (o "palco")
-      this._drawFX();                              // ...e o fogo de artifício POR CIMA da foto
-      G.sparkles.draw();
+      this._drawFX("manual");                      // só os foguetes MANUAIS (toque) por cima da foto
+      G.sparkles.draw();                           // faíscas do toque por cima
     }
     if (this.finale && !fg) {                       // dica de toque só quando NÃO está em full screen
       push();
@@ -236,12 +237,14 @@ const Story = {
       pop();
     }
   },
-  _drawFX() {
+  // which: "auto" = só automáticos | "manual" = só do toque | null = todos
+  _drawFX(which) {
+    const ok = which === "manual" ? (o => o.manual) : which === "auto" ? (o => !o.manual) : (() => true);
     drawingContext.globalCompositeOperation = "lighter";   // brilho aditivo (barato, sem shadowBlur)
-    G.flashes.forEach(f => f.draw());
-    G.shockwaves.forEach(s => s.draw());
-    G.hearts.forEach(h => h.draw());
-    G.fireworks.forEach(f => f.draw());
+    G.flashes.forEach(f => { if (ok(f)) f.draw(); });
+    G.shockwaves.forEach(s => { if (ok(s)) s.draw(); });
+    G.hearts.forEach(h => { if (ok(h)) h.draw(); });
+    G.fireworks.forEach(f => { if (ok(f)) f.draw(); });
     drawingContext.globalCompositeOperation = "source-over";
   },
 };
