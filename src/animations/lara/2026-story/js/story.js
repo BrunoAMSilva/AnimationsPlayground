@@ -214,19 +214,19 @@ const Story = {
   },
 
   draw() {
+    const fg = !!(this.slideshow && this.slideshow.mode === "fg");
     if (this.slideshow && this.slideshow.mode === "bg") this.slideshow.draw();   // fotos a passar em fundo
-    drawingContext.globalCompositeOperation = "lighter";   // brilho aditivo (barato, sem shadowBlur)
-    G.flashes.forEach(f => f.draw());
-    G.shockwaves.forEach(s => s.draw());
-    G.hearts.forEach(h => h.draw());
-    G.fireworks.forEach(f => f.draw());
-    drawingContext.globalCompositeOperation = "source-over";
+    if (!fg) this._drawFX();                       // fogo de artifício por trás do conteúdo normal
     G.swarm.draw();
     G.astro.draw();
     if (this.montage) this.montage.draw();
-    G.sparkles.draw();
-    if (this.slideshow && this.slideshow.mode === "fg") this.slideshow.draw();   // fotos em 1º plano
-    if (this.finale) {
+    if (!fg) G.sparkles.draw();
+    if (fg) {
+      this.slideshow.draw();                       // foto em full screen (o "palco")
+      this._drawFX();                              // ...e o fogo de artifício POR CIMA da foto
+      G.sparkles.draw();
+    }
+    if (this.finale && !fg) {                       // dica de toque só quando NÃO está em full screen
       push();
       textAlign(CENTER, CENTER); noStroke();
       fill(200, 225, 255, this.msgA * (150 + Math.sin(frameCount * 0.06) * 60));
@@ -235,5 +235,13 @@ const Story = {
       text("Toca no céu para festejar!", width / 2, height * 0.9);
       pop();
     }
+  },
+  _drawFX() {
+    drawingContext.globalCompositeOperation = "lighter";   // brilho aditivo (barato, sem shadowBlur)
+    G.flashes.forEach(f => f.draw());
+    G.shockwaves.forEach(s => s.draw());
+    G.hearts.forEach(h => h.draw());
+    G.fireworks.forEach(f => f.draw());
+    drawingContext.globalCompositeOperation = "source-over";
   },
 };

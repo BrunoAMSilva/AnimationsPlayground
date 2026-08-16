@@ -45,9 +45,13 @@ canvas { display: block; position: fixed; inset: 0; z-index: 0; }
 .hud { position: fixed; inset: 0; z-index: 15; pointer-events: none; }
 .hud.hidden { display: none; }
 .ctl {
-  pointer-events: auto; position: absolute; top: max(14px, env(safe-area-inset-top)); right: 16px;
-  width: 44px; height: 44px; border-radius: 50%; font-size: 20px; cursor: pointer;
+  pointer-events: auto; position: absolute; top: max(14px, env(safe-area-inset-top));
+  width: 44px; height: 44px; border-radius: 50%; cursor: pointer; padding: 0;
+  display: flex; align-items: center; justify-content: center;
   background: rgba(10,18,44,.55); color: var(--ink); border: 1px solid rgba(120,180,255,.3);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px); transition: border-color .15s, background .15s;
 }
-.ctl:hover { border-color: var(--cyan); }
+.ctl svg { width: 22px; height: 22px; display: block; }
+.ctl:hover { border-color: var(--cyan); background: rgba(16,28,66,.7); }
+#replayBtn { right: 16px; }
+#slideBtn { right: 70px; }

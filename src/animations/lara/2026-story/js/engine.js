@@ -892,7 +892,7 @@ class Slideshow {
     drawingContext.globalAlpha = 1; pop();
   }
   draw() {
-    if (this.mode === "fg") { push(); noStroke(); fill(4, 6, 16, 210); rect(0, 0, width, height); pop(); }   // palco escuro p/ a foto inteira
+    if (this.mode === "fg") { push(); noStroke(); fill(6, 8, 20, 125); rect(0, 0, width, height); pop(); }   // palco (suave) p/ a foto inteira
     const baseA = this.mode === "fg" ? 0.98 : 0.16;
     if (this.prev) this._drawImg(this.prev, baseA * (1 - this.fade));
     this._drawImg(this.cur, baseA * this.fade);
