@@ -647,11 +647,11 @@ class PhotoMontage {
     const imgs = images || [];
     this.n = imgs.length;                 // 0 = a estrela nasce só de luz (público, sem fotos)
     this.gatherDur = 3.0;                                     // sem fotos (só luz)
-    // ritmo: todas as fotos chegam em ~14s, por muitas que sejam (859 -> ~0.016s entre cada)
-    this.stagger = this.n ? Math.max(0.014, Math.min(0.35, 14 / this.n)) : 0;
-    this.flyDur = this.n > 200 ? 0.5 : 0.7;                  // com muitas fotos, entram mais depressa
-    this.mergeDur = this.n > 200 ? 0.18 : 0.25;             // ao chegar, a foto some depressa (vira partículas)
-    this.baseSize = m * (this.n > 200 ? 0.15 : this.n > 24 ? 0.23 : 0.3);   // muitas -> cartões mais pequenos
+    // ritmo LENTO para se ver a Lara a crescer (fotos por ordem cronológica): todas chegam em ~28s
+    this.stagger = this.n ? Math.max(0.02, Math.min(0.5, 28 / this.n)) : 0;
+    this.flyDur = this.n > 200 ? 0.85 : 0.8;                 // viajam mais devagar -> vêem-se melhor
+    this.mergeDur = this.n > 200 ? 0.4 : 0.3;               // cada foto fica à vista mais tempo antes de virar partículas
+    this.baseSize = m * (this.n > 200 ? 0.26 : this.n > 24 ? 0.26 : 0.32);   // fotos MAIORES
     this.stars = [];                                         // 1 partícula por foto -> formam a estrela
     this.starR = m * 0.02;                                  // raio da estrela (cresce com cada foto)
     this.items = [];
@@ -660,7 +660,7 @@ class PhotoMontage {
       this.items.push({
         img: imgs[i],
         sx: this.cx + Math.cos(a) * R, sy: this.cy + Math.sin(a) * R,   // fora do ecrã, aleatório
-        tx: this.cx + rnd(-1, 1) * m * 0.055, ty: this.cy + rnd(-1, 1) * m * 0.05,
+        tx: this.cx + rnd(-1, 1) * m * 0.085, ty: this.cy + rnd(-1, 1) * m * 0.075,
         rot0: rnd(-0.7, 0.7), rot1: rnd(-0.16, 0.16),
         appear: i * this.stagger, arr: 0,
         size: this.baseSize * rnd(0.9, 1.1),
@@ -795,7 +795,7 @@ class PhotoMontage {
       const e = easeOutCubic(it.arr);
       let x = it.sx + (it.tx - it.sx) * e, y = it.sy + (it.ty - it.sy) * e;
       let rot = it.rot0 + (it.rot1 - it.rot0) * e;
-      let alpha = 1, sc = 0.6 + 0.4 * e;
+      let alpha = 1, sc = 0.82 + 0.18 * e;                // entram já grandes
       if (this.phase === "explode") { alpha = 0; }        // já viraram partículas
       else if (it.arr >= 1) {
         const mg = Math.min(1, (this.t - (it.appear + this.flyDur)) / this.mergeDur);
