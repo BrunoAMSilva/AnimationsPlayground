@@ -11,12 +11,14 @@ function makeImg(src) { const im = new Image(); im.src = src; return im; }
 
 // fotos da Lara: assets/photos/1.jpg, 2.jpg, ... (também .jpeg/.png/.webp)
 const PHOTO_EXTS = ["jpg", "jpeg", "png", "webp"];
+// testa existência SEM descodificar a imagem (HEAD é leve); fallback p/ Image (ex.: file://)
+async function _photoHead(url) {
+  try { return (await fetch(url, { method: "HEAD" })).ok; }
+  catch (_) { return await new Promise(r => { const im = new Image(); im.onload = () => r(true); im.onerror = () => r(false); im.src = url; }); }
+}
 function _photoExists(i) {
   return (async () => {
-    for (const e of PHOTO_EXTS) {
-      const ok = await new Promise(r => { const im = new Image(); im.onload = () => r(true); im.onerror = () => r(false); im.src = `assets/photos/${i}.${e}`; });
-      if (ok) return true;
-    }
+    for (const e of PHOTO_EXTS) { if (await _photoHead(`assets/photos/${i}.${e}`)) return true; }
     return false;
   })();
 }
@@ -86,12 +88,15 @@ async function loadPhotos(maxShow = 80, targetW = 240) {
     set.add(total);                                  // a última = a estrela nasceu
     idxs = [...set].sort((a, b) => a - b);
   }
-  // carrega em lotes PARALELOS (muito mais rápido que 1 a 1) -> a montagem raramente espera
+  // carrega em lotes PEQUENOS e CEDE o fio principal ao browser entre cada lote
+  // (assim o clique em "Começar" e a animação nunca congelam durante o carregamento)
   const out = [];
-  const BATCH = 12;
+  const BATCH = 4;
+  const yieldFrame = () => new Promise(r => (typeof requestAnimationFrame === "function" ? requestAnimationFrame(() => r()) : setTimeout(r, 0)));
   for (let s = 0; s < idxs.length; s += BATCH) {
     const res = await Promise.all(idxs.slice(s, s + BATCH).map(i => loadPhoto(i, targetW)));
     for (const r of res) if (r) out.push(r);
+    await yieldFrame();   // deixa o browser desenhar um frame entre lotes -> sem freeze
   }
   if (window.console) console.log(`fotos: ${total} no total, ${out.length} na montagem`);
   return out;
