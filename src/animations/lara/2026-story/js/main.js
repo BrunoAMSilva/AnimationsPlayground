@@ -39,10 +39,13 @@ async function countPhotos(cap = 3000) {
   return last;
 }
 // carrega a foto i, reduzida para ~targetW de largura (thumbnail, memória leve)
+// PREFERE a miniatura pré-gerada (thumbs/i.jpg, muito mais leve) e só usa o
+// original de 16MP se a miniatura não existir.
 async function loadPhoto(i, targetW) {
-  for (const e of PHOTO_EXTS) {
+  const urls = [`assets/photos/thumbs/${i}.jpg`, ...PHOTO_EXTS.map(e => `assets/photos/${i}.${e}`)];
+  for (const url of urls) {
     const res = await new Promise(r => {
-      const im = new Image();
+      const im = new Image(); im.decoding = "async";
       im.onload = async () => {
         try {
           const s = Math.min(1, targetW / im.naturalWidth);
@@ -70,14 +73,14 @@ async function loadPhoto(i, targetW) {
         } catch (_) { r(null); }
       };
       im.onerror = () => r(null);
-      im.src = `assets/photos/${i}.${e}`;
+      im.src = url;
     });
     if (res && res.bmp) return res;
   }
   return null;
 }
 // carrega uma AMOSTRA de até maxShow fotos, distribuída por todo o ano (inclui sempre a última)
-async function loadPhotos(maxShow = 80, targetW = 240) {
+async function loadPhotos(maxShow = 64, targetW = 240) {
   const total = await countPhotos();
   if (!total) return [];
   let idxs;
@@ -91,7 +94,7 @@ async function loadPhotos(maxShow = 80, targetW = 240) {
   // carrega em lotes PEQUENOS e CEDE o fio principal ao browser entre cada lote
   // (assim o clique em "Começar" e a animação nunca congelam durante o carregamento)
   const out = [];
-  const BATCH = 4;
+  const BATCH = 3;
   const yieldFrame = () => new Promise(r => (typeof requestAnimationFrame === "function" ? requestAnimationFrame(() => r()) : setTimeout(r, 0)));
   for (let s = 0; s < idxs.length; s += BATCH) {
     const res = await Promise.all(idxs.slice(s, s + BATCH).map(i => loadPhoto(i, targetW)));

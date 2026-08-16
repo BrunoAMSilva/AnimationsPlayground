@@ -854,15 +854,17 @@ class Slideshow {
   _preload() {
     const tryIdx = (guard) => {
       this.idx++; if (this.idx > this.maxTry) this.idx = 1;
-      let e = 0;
-      const tryExt = () => {
-        if (e >= _SLIDE_EXTS.length) { if (guard < 60) tryIdx(guard + 1); return; }   // salta .mov/faltas
-        const im = new Image();
+      // prefere a miniatura leve (thumbs/i.jpg); cai para o original só se faltar
+      const cands = [`assets/photos/thumbs/${this.idx}.jpg`, ..._SLIDE_EXTS.map(e => `assets/photos/${this.idx}.${e}`)];
+      let c = 0;
+      const tryNext = () => {
+        if (c >= cands.length) { if (guard < 60) tryIdx(guard + 1); return; }   // salta .mov/faltas
+        const im = new Image(); im.decoding = "async";
         im.onload = () => { this.next = im; };
-        im.onerror = () => { e++; tryExt(); };
-        im.src = `assets/photos/${this.idx}.${_SLIDE_EXTS[e]}`;
+        im.onerror = () => { c++; tryNext(); };
+        im.src = cands[c];
       };
-      tryExt();
+      tryNext();
     };
     tryIdx(0);
   }
